@@ -192,7 +192,7 @@ Two passes:
 CLI:
 
 ```bash
-java -jar comp-1.0.jar [-h | --help]
+java -jar comp-1.0.jar -p <target_file> -i <input_stream> -o <output_stream> -l <log_stream>
 ```
 
 Implemented in [comp](/comp) module.
