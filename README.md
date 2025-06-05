@@ -170,7 +170,11 @@ Computer/Assembly instructions:
 
 ## Assembly translator
 
-CLI: `java -jar asm-1.0.jar <input_file> <target_file>`
+CLI:
+
+```bash
+java -jar asm-1.0.jar <input_file> <target_file>
+```
 
 Implemented in [asm](/asm) module.  
 Two passes:
