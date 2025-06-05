@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run DeteKt check
+        uses: natiginfo/action-detekt-all@1.23.6
+        
+      - name: Run Kotlin linter
+        uses: vroy/gha-kotlin-linter@v4
+
+      - name: markdown-lint
+        uses: articulate/actions-markdownlint@v1.1.0
+        
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Gradle Build Action
+        uses: gradle/gradle-build-action@v3.3.1
+        with:
+          gradle-version: 8.4
+          
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          cd python
+          poetry install
+
+      - name: Run tests and collect coverage
+        run: |
+          cd python
+          poetry run coverage run -m pytest .
+          poetry run coverage report -m
+
