@@ -54,7 +54,9 @@ private fun addLabelInstruction(
                 throw IllegalArgumentException("strings must be enclosed with ' or \"")
             }
 
-            val stringValue = operand.drop(1).dropLast(1)
+            var stringValue = operand.drop(1).dropLast(1)
+
+            stringValue = stringValue.replace("\\n", "\n")
 
             instructions.add(LabelInstruction(MemoryCell.Data(stringValue.length)))
             instructions.addAll(

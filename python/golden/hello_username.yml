@@ -2,54 +2,35 @@ in_source: |
   port:
                   word 1
   hello_str:
-                  word 72         ; H
-                  word 101        ; e
-                  word 108        ; l
-                  word 108        ; l
-                  word 111        ; o
-                  word 44         ; ,
-                  word 32         ;
-                  word 119        ; w
-                  word 104        ; h
-                  word 97         ; a
-                  word 116        ; t
-                  word 32         ;
-                  word 105        ; i
-                  word 115        ; s
-                  word 32         ;
-                  word 121        ; y
-                  word 111        ; o
-                  word 117        ; u
-                  word 114        ; r
-                  word 32         ;
-                  word 110        ; n
-                  word 97         ; a
-                  word 109        ; m
-                  word 101        ; e
-                  word 63         ; ?
-                  word 10         ; \n
-                  word 0          ; \0
+                  string "Hello, what is your name?\n"
+
   print_char:
                   lit port        ; symbol port_addr
                   load            ; symbol port
                   out             ;
                   ret             ;
+
   print_str:
-                  dup             ; str_addr str_addr
-                  load            ; str_addr symbol
-                  dup             ; str_addr symbol symbol
-                  lit ps_ret      ; str_addr symbol symbol ps_ret
-                  swap            ; str_addr symbol ps_ret symbol
-                  jz              ; str_addr symbol
-                  lit print_char  ; str_addr symbol
-                  call            ; str_addr
-                  inc             ; str_addr + 1 -> str_addr
-                  lit print_str   ; str_addr print_str
-                  jump            ; str_addr
-  ps_ret:
-                  drop            ; str_addr (symbol)
-                  drop            ; (str_addr)
-                  ret             ;
+                  dup                 ; str_addr str_addr
+                  load                ; str_addr length
+  print_loop:
+                  dup                 ; str_addr length length
+                  lit print_end       ; str_addr length length print_end
+                  swap                ; str_addr length print_end length
+                  jz                  ; str_addr length
+
+                  swap                ; length str_addr
+                  inc                 ; length str_addr+1
+                  over                ; str_addr+1 length str_addr+1
+                  load                ; str_addr+1 length symbol
+
+                  lit print_char      ; str_addr+1 length symbol print_char
+                  call                ; str_addr+1 length
+                  dec                 ; str_addr+1 length-1
+                  lit print_loop      ; str_addr+1 length-1 print_loop
+                  jump                ; str_addr+1 length-1
+  print_end:
+                  ret                 ;
 
   read_char:
                   lit port        ; port_addr
@@ -57,33 +38,41 @@ in_source: |
                   in              ; in_symbol
                   ret             ; in_symbol
 
+  var_symbol:
+                  word 0
+  length_addr:
+                  word 0
+
   read_string:
-                  lit stop_read   ; str_addr stop_read
-                  lit read_char   ; str_addr stop_read read_char
-                  call            ; str_addr stop_read input
-                  over            ; str_addr input stop_read input
-                  jz              ; str_addr input
-                  swap            ; input str_addr
-                  over            ; str_addr input str_addr
-                  dup             ; [...] str_addr -> str_addr
-                  inc             ; str_addr + 1
-                  load            ; zero/symbol
-                  lit continue    ; zero/symbol continue
-                  swap            ; continue zero/symbol
-                  jz              ; str_addr input str_addr
-                  drop            ; str_addr input
-                  drop            ; str_addr
-                  lit 0           ; str_addr 0
-                  lit stop_read   ; because current symbol was nul-terminating
-                  jump            ;
-  continue:
+                  dup             ; str_addr str_addr
+                  lit length_addr ; str_addr str_addr length_addr
                   store           ; str_addr
-                  inc             ; str_addr + 1 -> str_addr
-                  lit read_string ; str_addr read_string
-                  jump            ; str_addr
-  stop_read:
-                  swap            ; input str_addr
-                  store           ;
+  read_loop:
+                  lit read_char   ; str_addr read_char
+                  call            ; str_addr symbol
+                  dup             ; str_addr symbol symbol
+                  lit end_read    ; str_addr symbol symbol end_read
+                  swap            ; str_addr symbol end_read symbol
+                  jz              ; str_addr symbol
+
+                  lit length_addr ; str_addr symbol length_addr_addr
+                  load            ; str_addr symbol length_addr
+                  dup             ; str_addr symbol length_addr length_addr
+                  load            ; str_addr symbol length_addr length
+
+                  inc             ; str_addr symbol length_addr length+1
+                  swap            ; str_addr symbol length+1 length_addr
+                  store           ; str_addr symbol
+                  swap            ; symbol str_addr
+                  inc             ; symbol str_addr+1
+                  over            ; str_addr+1 symbol str_addr+1
+                  store           ; str_addr+1
+
+                  lit read_loop   ; str_addr+1 read_loop
+                  jump            ; str_addr+1
+  end_read:
+                  drop            ; str_addr
+                  drop            ;
                   ret             ;
 
   start:
@@ -142,13 +131,7 @@ in_source: |
                   buf 30
 
   hello_user:
-                  word 72         ; 'H'
-                  word 101        ; 'e'
-                  word 108        ; 'l'
-                  word 108        ; 'l'
-                  word 111        ; 'o'
-                  word 44         ; ','
-                  word 32         ; ' '
+                  string "Hello, "
                   word 0          ; '\0'
 
 in_stdin: rmntim
