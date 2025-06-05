@@ -45,3 +45,4 @@ bin/
 /isa/src/main/resources/comp_log
 
 **/*.docx
+__pycache__/
