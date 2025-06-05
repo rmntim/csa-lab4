@@ -38,6 +38,7 @@ Syntax:
 <instr> ::= <op0>
         | <op1> " " <label_name>
         | <op1> " " <positive_integer>
+        | <string_decl>
 
 <op0> ::= "nop"
       | "load"
@@ -67,6 +68,8 @@ Syntax:
 <op1> ::= "lit"
       | "word"
       | "buf"
+
+<string_decl> ::= "string" " " '"' ? all visible characters except `"` ? '"'
 
 <positive_integer> ::= [0-9]+
 <integer> ::= "-"? <positive_integer>
@@ -121,6 +124,7 @@ Assembly-only instructions:
 
 * `WORD <literal>` – define a variable in memory.
 * `BUF <amount>` – define a zero-buffer in memory.
+* `STRING <string>` - define a Pascal string in memory.
 
 Computer/Assembly instructions:
 

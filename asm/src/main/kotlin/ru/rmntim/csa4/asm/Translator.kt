@@ -9,6 +9,8 @@ private val POSSIBLE_OPERAND_INSTRUCTIONS = setOf(
     Opcode.LIT
 )
 
+private val STRING_REGEX = "\".*\"".toRegex()
+
 private fun meaningfulToken(line: String): String {
     return line.split(";")[0].trim()
 }
@@ -45,6 +47,18 @@ private fun addLabelInstruction(
                 }
             )
             instructionsAdded = operand.toInt()
+        }
+
+        Opcode.STRING -> {
+            if (!operand.matches(STRING_REGEX)) {
+                throw IllegalArgumentException("strings must be enclosed with ' or \"")
+            }
+
+            val stringValue = operand.drop(1).dropLast(1)
+            instructions.addAll(
+                stringValue.map { LabelInstruction(MemoryCell.Data(it.code)) }
+            )
+            instructionsAdded = stringValue.length
         }
 
         in POSSIBLE_OPERAND_INSTRUCTIONS -> {

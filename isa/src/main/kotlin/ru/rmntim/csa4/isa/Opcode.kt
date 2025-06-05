@@ -4,6 +4,7 @@ enum class Opcode {
     NOP, // No operation
     WORD, // Define a numeric constant
     BUF, // Define a zeroed buffer
+    STRING, // Define a Pascal string
     LIT, // Push literal on stack
     LOAD, // Load value to data stack
     STORE, // Push value from data stack to memory
