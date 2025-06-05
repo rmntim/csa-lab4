@@ -55,10 +55,13 @@ private fun addLabelInstruction(
             }
 
             val stringValue = operand.drop(1).dropLast(1)
+
+            instructions.add(LabelInstruction(MemoryCell.Data(stringValue.length)))
             instructions.addAll(
                 stringValue.map { LabelInstruction(MemoryCell.Data(it.code)) }
             )
-            instructionsAdded = stringValue.length
+
+            instructionsAdded = stringValue.length + 1
         }
 
         in POSSIBLE_OPERAND_INSTRUCTIONS -> {
@@ -103,7 +106,7 @@ private fun translatePart1(text: String): Pair<Map<String, Int>, List<LabelInstr
             labels[label.lowercase()] = nextInstructionLine
         } else {
             // this is an opcode instruction
-            val instruction = token.split(" ")
+            val instruction = token.split(" ", limit = 2)
 
             val opcode = instruction[0]
             val parsedOpcode = Opcode.valueOf(opcode.uppercase())
