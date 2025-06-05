@@ -132,7 +132,6 @@ in_source: |
 
   hello_user:
                   string "Hello, "
-                  word 0          ; '\0'
 
 in_stdin: rmntim
 out_stdout: |-
