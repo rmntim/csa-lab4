@@ -2,8 +2,6 @@
 
 > `asm | stack | neum | mc | tick | binary | stream | port | pstr | prob1 | -`
 
-**Full report (in Russian) you can find [here](/docs/report.pdf).**
-
 Task details: https://gitlab.se.ifmo.ru/computer-systems/csa-rolling/-/blob/07ffa8338bc3f2584260beb3d0be6c05ba2955d6/lab4-task.md
 
 ---
