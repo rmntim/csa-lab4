@@ -97,8 +97,6 @@ class BCompCLI : CliktCommand() {
                 } else memoryInitialSize
 
         val inputBuffer = ArrayDeque(inputFile.readText(Charsets.UTF_8).map { it.code })
-        inputBuffer.addLast(0)
-
         val dataPath = DataPath(dataStackSize, finalMemoryInitSize, program.program)
         val ioController = IOController()
         val ioUnit = IOUnit(inputBuffer)

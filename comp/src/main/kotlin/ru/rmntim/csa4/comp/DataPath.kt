@@ -130,14 +130,17 @@ class IOController {
         "I/O OPERATION OCCURS (IN): port: $port ---> value: $value"
 
     fun input(port: Int): Int {
-        val input = connectedDevices[port]!!.inputBuffer.first()
-        connectedDevices[port]!!.inputBuffer.removeFirst()
+        val input = if (connectedDevices[port]?.inputBuffer?.isNotEmpty() ?: throw NoDeviceException(port)) {
+            connectedDevices[port]?.inputBuffer?.removeFirst() ?: throw NoDeviceException(port)
+        } else {
+            0
+        }
         logger.info { generateIOInLog(port, input) }
         return input
     }
 
     fun output(port: Int, value: Int) {
-        connectedDevices[port]!!.outputBuffer.add(value)
+        connectedDevices[port]?.outputBuffer?.add(value) ?: throw NoDeviceException(port)
         logger.info { generateIOOutputLog(port, value) }
     }
 
@@ -157,3 +160,5 @@ class IOController {
 class IOUnit(val inputBuffer: ArrayDeque<Int>) {
     val outputBuffer: MutableList<Int> = mutableListOf()
 }
+
+class NoDeviceException(port: Int): Exception("no device at port $port")

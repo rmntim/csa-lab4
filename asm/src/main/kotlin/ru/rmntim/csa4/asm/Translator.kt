@@ -179,4 +179,4 @@ fun translateAsm(filename: String): Program {
     return resultOfSecondPart
 }
 
-data class NoSuchLabelException(val label: String) : Exception("No such label: $label")
+class NoSuchLabelException(val label: String) : Exception("No such label: $label")
