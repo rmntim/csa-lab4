@@ -140,7 +140,7 @@ private fun translatePart2(
                     resultInstructions.add(
                         MemoryCell.OperandInstruction(
                             memoryCell.opcode,
-                            labels[labelInstruction.label]!!
+                            labels[labelInstruction.label] ?: throw NoSuchLabelException(labelInstruction.label)
                         )
                     )
                 }
@@ -148,7 +148,7 @@ private fun translatePart2(
                 is MemoryCell.Data -> {
                     resultInstructions.add(
                         MemoryCell.Data(
-                            labels[labelInstruction.label]!!
+                            labels[labelInstruction.label] ?: throw NoSuchLabelException(labelInstruction.label)
                         )
                     )
                 }
@@ -178,3 +178,5 @@ fun translateAsm(filename: String): Program {
 
     return resultOfSecondPart
 }
+
+data class NoSuchLabelException(val label: String) : Exception("No such label: $label")
