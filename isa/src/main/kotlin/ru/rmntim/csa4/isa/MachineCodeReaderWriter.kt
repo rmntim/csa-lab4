@@ -2,7 +2,6 @@ package ru.rmntim.csa4.isa
 
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.io.File
 import java.io.InputStream
 import java.io.DataInputStream
 import java.io.ByteArrayInputStream
@@ -11,11 +10,11 @@ import java.io.DataOutputStream
 import java.io.ByteArrayOutputStream
 import java.nio.file.Path
 
-fun readCode(filename: String): Program =
-    ProgramBinarySerializer.deserialize(File(filename).inputStream())
+fun readCode(filename: Path): Program =
+    ProgramBinarySerializer.deserialize(filename.toFile().inputStream())
 
-fun writeCode(program: Program, filename: String) =
-    ProgramBinarySerializer.serialize(program, File(filename).outputStream())
+fun writeCode(program: Program, filename: Path) =
+    ProgramBinarySerializer.serialize(program, filename.toFile().outputStream())
 
 
 object ProgramBinarySerializer {
