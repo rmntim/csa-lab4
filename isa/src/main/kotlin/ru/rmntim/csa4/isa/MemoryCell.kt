@@ -2,11 +2,6 @@ package ru.rmntim.csa4.isa
 
 import kotlinx.serialization.Serializable
 
-/**
- * Memory cell may be an operand/no operand instruction, or data.
- *
- * Sealed classes are used in Kotlin to provide restricted inheritance mechanism.
- */
 @Serializable
 sealed class MemoryCell {
     @Serializable
