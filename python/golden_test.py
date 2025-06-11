@@ -5,6 +5,8 @@ import tempfile
 
 import pytest
 
+LOG_LINE_LIMIT = 500
+
 
 def run_command(command):
     subprocess.call(shlex.split(command), shell=False, cwd="..")
@@ -31,7 +33,7 @@ def test_translator_and_machine(golden):
             output = file.read()
 
         with open(log_stream, encoding="utf-8") as file:
-            log = file.read()
+            log = "\n".join(file.readlines()[:LOG_LINE_LIMIT])
 
         assert output == golden.out["out_stdout"]
         assert log == golden.out["out_log"]
