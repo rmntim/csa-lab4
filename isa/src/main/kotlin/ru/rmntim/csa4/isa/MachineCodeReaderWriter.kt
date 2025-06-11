@@ -14,7 +14,7 @@ fun readCode(filename: Path): Program =
     ProgramBinarySerializer.deserialize(filename.toFile().inputStream())
 
 fun writeCode(program: Program, filename: Path) =
-    ProgramBinarySerializer.serialize(program, filename.toFile().outputStream())
+    ProgramBinarySerializer.serialize(program, filename.toFile().apply { createNewFile() }.outputStream())
 
 
 object ProgramBinarySerializer {
