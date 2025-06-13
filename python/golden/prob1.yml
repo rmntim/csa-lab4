@@ -2,14 +2,17 @@ in_source: |
   port:
       word 1
 
+  max_palindrome:
+      word 0
+
   start:
       lit 999             ; i
   outer_loop:
       dup                 ; i i
       lit 100             ; i i 100
       sub                 ; i i-100
-      lit end_outer       ; i i-100 end_outer
-      swap                ; i end_outer i-100
+      lit end             ; i i-100 end
+      swap                ; i end i-100
       jn                  ; i
       lit 999             ; i j
   inner_loop:
@@ -29,10 +32,26 @@ in_source: |
       dup                 ; i j i*j i*j
       lit is_palindrome   ; i j i*j i*j is_palindrome
       call                ; i j i*j is_palindrome_res
-      lit found           ; i j i*j is_palindrome_res found
-      swap                ; i j i*j found is_palindrome_res
+      lit next_iter       ; i j i*j is_palindrome_res next_iter
+      swap                ; i j i*j next_iter is_palindrome_res
       jz                  ; i j i*j
 
+      lit max_palindrome  ; i j i*j max_palindrome_addr
+      load                ; i j i*j max_palindrome
+      sub                 ; i j i*j-max_palindrome
+
+      dup                 ; i j i*j-max_palindrome i*j-max_palindrome
+      lit next_iter       ; i j i*j-max_palindrome i*j-max_palindrome next_iter
+      swap                ; i j i*j-max_palindrome next_iter i*j-max_palindrome
+      jn                  ; i j i*j-max_palindrome
+
+      lit max_palindrome  ; i j i*j-max_palindrome max_palindrome_addr
+      load                ; i j i*j-max_palindrome max_palindrome
+      add                 ; i j i*j
+      lit max_palindrome  ; i j i*j max_palindrome_addr
+      store               ; i j
+      dup                 ; i j j
+  next_iter:
       drop                ; i j
       dec                 ; i j-1
       lit inner_loop      ; i j-1 inner_loop
@@ -42,23 +61,14 @@ in_source: |
       dec                 ; i-1
       lit outer_loop      ; i-1 outer_loop
       jump                ; i-1
-  end_outer:
-      inc                 ; i+1
-      dup                 ; i+1 i+1
-      mul                 ; i+1*i+1
-      lit end             ; i+1*i+1 end
-      jump                ; i+1*i+1
-  found:
-      swap                ; i i*j j
-      drop                ; i i*j
-      swap                ; i*j i
-      drop                ; i*j
   end:
-      lit print_number    ; i*j print_number
+      drop                ;
+      lit max_palindrome  ; max_palindrome_addr
+      load                ; max_palindrome
+      lit print_number    ; max_palindrome print_number
       call                ; 
       halt
 
-  ; is_palindrome => 0 if yes, else non-zero
   orig:
       word 0
   rev:
@@ -100,7 +110,14 @@ in_source: |
       lit rev                     ; orig rev_addr
       load                        ; orig rev
       sub                         ; orig-rev
-      ret
+      lit palindrome_true         ; orig-rev palindrome_true
+      swap                        ; palindrome_true orig-rev
+      jz                          ;
+      lit 0                       ; false
+      ret                         ; false
+  palindrome_true:
+      lit 1                       ; true
+      ret                         ; true
 
   print_digit:
       lit 48              ; arg 48
