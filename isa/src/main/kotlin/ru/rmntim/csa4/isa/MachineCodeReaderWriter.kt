@@ -127,7 +127,7 @@ object ProgramBinarySerializer {
     }
     
     private fun getOpcodeByOrdinal(ordinal: Int): Opcode {
-        val opcodes = Opcode.values()
+        val opcodes = Opcode.entries.toTypedArray()
         if (ordinal < 0 || ordinal >= opcodes.size) {
             throw IllegalArgumentException("Invalid opcode ordinal: $ordinal")
         }
