@@ -11,7 +11,7 @@ import java.io.File
 sealed class Token {
     data class Label(val name: String, val line: Int) : Token()
     data class Instruction(val opcode: Opcode, val operand: String?, val line: Int) : Token()
-    data class Comment(val text: String, val line: Int) : Token()
+    data class Directive(val name: String, val operand: String?, val line: Int) : Token()
     object Empty : Token()
 }
 
@@ -22,6 +22,14 @@ enum class InstructionType {
     NO_OPERAND,        // nop, load, store, add, etc.
     OPERAND_REQUIRED,  // lit, word, buf
     DATA_DECLARATION   // string
+}
+
+/**
+ * Represents assembly sections
+ */
+enum class Section {
+    TEXT,  // Code section
+    DATA   // Data section
 }
 
 /**
@@ -116,6 +124,11 @@ class AssemblyLexer {
             return Token.Empty
         }
         
+        // Check if it's a directive
+        if (meaningfulPart.startsWith(".")) {
+            return parseDirective(meaningfulPart, lineNumber)
+        }
+        
         // Check if it's a label
         if (meaningfulPart.endsWith(":")) {
             val labelName = meaningfulPart.substringBefore(":").trim()
@@ -156,12 +169,48 @@ class AssemblyLexer {
         
         return Token.Instruction(config.opcode, operand, lineNumber)
     }
+    
+    private fun parseDirective(directive: String, lineNumber: Int): Token {
+        val parts = directive.split(" ", limit = 2)
+        val directiveName = parts[0].lowercase()
+        val operand = if (parts.size > 1) parts[1] else null
+        
+        when (directiveName) {
+            ".org" -> {
+                if (operand.isNullOrBlank()) {
+                    throw SyntaxError("Directive '.org' requires an address operand", lineNumber)
+                }
+                val address = operand.toIntOrNull()
+                if (address == null || address < 0) {
+                    throw SyntaxError("Invalid address '$operand' for .org directive", lineNumber)
+                }
+            }
+            ".data", ".text" -> {
+                if (operand != null) {
+                    throw SyntaxError("Directive '$directiveName' does not accept operands", lineNumber)
+                }
+            }
+            else -> {
+                throw SyntaxError("Unknown directive '$directiveName'", lineNumber)
+            }
+        }
+        
+        return Token.Directive(directiveName, operand, lineNumber)
+    }
 }
 
 /**
  * Represents an instruction with optional label reference for second pass
  */
 data class LabelInstruction(val instruction: MemoryCell, val label: String = "")
+
+/**
+ * Represents a memory segment with an address and instructions
+ */
+data class MemorySegment(
+    val startAddress: Int,
+    val instructions: MutableList<LabelInstruction> = mutableListOf()
+)
 
 /**
  * Instruction generator for converting tokens to machine code
@@ -227,11 +276,33 @@ class AssemblyParser {
     
     fun parse(tokens: List<Token>): ParseResult {
         val labels = mutableMapOf<String, Int>()
-        val instructions = mutableListOf<LabelInstruction>()
+        val segments = mutableListOf<MemorySegment>()
+        
+        var currentSection = Section.TEXT
         var currentAddress = 0
+        var currentSegment = MemorySegment(0)
         
         for (token in tokens) {
             when (token) {
+                is Token.Directive -> {
+                    when (token.name) {
+                        ".org" -> {
+                            // Save current segment if it has instructions
+                            if (currentSegment.instructions.isNotEmpty()) {
+                                segments.add(currentSegment)
+                            }
+                            // Start new segment at specified address
+                            currentAddress = token.operand!!.toInt()
+                            currentSegment = MemorySegment(currentAddress)
+                        }
+                        ".data" -> {
+                            currentSection = Section.DATA
+                        }
+                        ".text" -> {
+                            currentSection = Section.TEXT
+                        }
+                    }
+                }
                 is Token.Label -> {
                     if (labels.containsKey(token.name)) {
                         throw SyntaxError("Duplicate label '${token.name}'", token.line)
@@ -239,15 +310,49 @@ class AssemblyParser {
                     labels[token.name] = currentAddress
                 }
                 is Token.Instruction -> {
+                    validateInstructionPlacement(token, currentSection)
+                    
                     val generated = instructionGenerator.generateInstruction(token)
-                    instructions.addAll(generated)
+                    currentSegment.instructions.addAll(generated)
                     currentAddress += generated.size
                 }
                 else -> { /* Skip comments and empty tokens */ }
             }
         }
         
-        return ParseResult(labels, instructions)
+        // Add the final segment
+        if (currentSegment.instructions.isNotEmpty()) {
+            segments.add(currentSegment)
+        }
+        
+        return ParseResult(labels, segments)
+    }
+    
+    /**
+     * Validates that instructions are placed in appropriate sections
+     */
+    private fun validateInstructionPlacement(instruction: Token.Instruction, currentSection: Section) {
+        val config = INSTRUCTION_REGISTRY[instruction.opcode.name.lowercase()]
+            ?: throw SyntaxError("Unknown instruction '${instruction.opcode}'", instruction.line)
+        
+        when (currentSection) {
+            Section.TEXT -> {
+                // In text section, only allow actual instructions, not data declarations
+                if (config.type == InstructionType.DATA_DECLARATION || 
+                    instruction.opcode == Opcode.WORD || 
+                    instruction.opcode == Opcode.BUF) {
+                    throw SyntaxError("Data declaration '${instruction.opcode.name.lowercase()}' not allowed in .text section", instruction.line)
+                }
+            }
+            Section.DATA -> {
+                // In data section, only allow data declarations and data-related instructions
+                if (config.type != InstructionType.DATA_DECLARATION && 
+                    instruction.opcode != Opcode.WORD && 
+                    instruction.opcode != Opcode.BUF) {
+                    throw SyntaxError("Instruction '${instruction.opcode.name.lowercase()}' not allowed in .data section", instruction.line)
+                }
+            }
+        }
     }
 }
 
@@ -256,7 +361,7 @@ class AssemblyParser {
  */
 data class ParseResult(
     val labels: Map<String, Int>,
-    val instructions: List<LabelInstruction>
+    val segments: List<MemorySegment>
 )
 
 /**
@@ -264,24 +369,36 @@ data class ParseResult(
  */
 class CodeGenerator {
     fun generate(parseResult: ParseResult): Program {
-        val resolvedInstructions = mutableListOf<MemoryCell>()
+        // Find the maximum address needed to determine memory size
+        var maxAddress = 0
+        for (segment in parseResult.segments) {
+            val segmentEnd = segment.startAddress + segment.instructions.size
+            if (segmentEnd > maxAddress) {
+                maxAddress = segmentEnd
+            }
+        }
         
-        for (labelInstruction in parseResult.instructions) {
-            if (labelInstruction.label.isEmpty()) {
-                resolvedInstructions.add(labelInstruction.instruction)
-            } else {
-                val resolvedInstruction = resolveLabelReference(
-                    labelInstruction,
-                    parseResult.labels
-                )
-                resolvedInstructions.add(resolvedInstruction)
+        // Initialize memory with default data cells
+        val memory = Array<MemoryCell>(maxAddress) { MemoryCell.Data(0) }
+        
+        // Place instructions from all segments
+        for (segment in parseResult.segments) {
+            var currentAddress = segment.startAddress
+            for (labelInstruction in segment.instructions) {
+                val resolvedInstruction = if (labelInstruction.label.isEmpty()) {
+                    labelInstruction.instruction
+                } else {
+                    resolveLabelReference(labelInstruction, parseResult.labels)
+                }
+                memory[currentAddress] = resolvedInstruction
+                currentAddress++
             }
         }
         
         val startAddress = parseResult.labels["start"]
             ?: throw SyntaxError("Program must have a 'start:' label", 0)
         
-        return Program(startAddress, resolvedInstructions.toTypedArray())
+        return Program(startAddress, memory)
     }
     
     private fun resolveLabelReference(
