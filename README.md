@@ -16,11 +16,14 @@ Task details: https://gitlab.se.ifmo.ru/computer-systems/csa-rolling/-/blob/07ff
 
 ## Table of Contents
 
-1. [Assembly Language](#assembly-language)
-2. [ISA](#isa)
-3. [Assembly Translator](#assembly-translator)
-4. [Computer Simulation](#computer-simulation)
-5. [Tests](#tests)
+- [Computer Systems and Architecture Labwork №4](#computer-systems-and-architecture-labwork-4)
+  - [Содержание](#содержание)
+  - [Table of Contents](#table-of-contents)
+  - [Assembly language](#assembly-language)
+  - [ISA](#isa)
+  - [Assembly translator](#assembly-translator)
+  - [Computer simulation](#computer-simulation)
+  - [Tests](#tests)
 
 ## Assembly language
 
@@ -58,7 +61,7 @@ Syntax:
       | "xor"
       | "jz"
       | "jn"
-      | "jmp"
+      | "jump"
       | "call"
       | "ret"
       | "in"
