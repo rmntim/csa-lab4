@@ -86,10 +86,10 @@ private val INSTRUCTION_REGISTRY = mapOf(
     
     // Operand required instructions
     "lit" to InstructionConfig(Opcode.LIT, InstructionType.OPERAND_REQUIRED) { operand ->
-        operand.toIntOrNull() != null || isValidLabel(operand)
+        operand.toIntOrNull() != null || isValidLabel(operand) || isValidCharacterLiteral(operand)
     },
     "word" to InstructionConfig(Opcode.WORD, InstructionType.OPERAND_REQUIRED) { operand ->
-        operand.toIntOrNull() != null || isValidLabel(operand)
+        operand.toIntOrNull() != null || isValidLabel(operand) || isValidCharacterLiteral(operand)
     },
     "buf" to InstructionConfig(Opcode.BUF, InstructionType.OPERAND_REQUIRED) { operand ->
         operand.toIntOrNull() != null && operand.toInt() > 0
@@ -108,6 +108,41 @@ private fun isValidLabel(name: String): Boolean {
     if (name.isEmpty()) return false
     if (!name[0].isLetter()) return false
     return name.all { it.isLetterOrDigit() || it == '_' }
+}
+
+/**
+ * Validates if a string is a valid character literal and returns its ASCII value
+ */
+private fun parseCharacterLiteral(literal: String): Int? {
+    if (!literal.startsWith('\'') || !literal.endsWith('\'')) {
+        return null
+    }
+    
+    val content = literal.substring(1, literal.length - 1)
+    
+    return when {
+        content.isEmpty() -> null
+        content.length == 1 -> content[0].code
+        content.length == 2 && content.startsWith('\\') -> {
+            when (content[1]) {
+                'n' -> 10  // newline
+                't' -> 9   // tab
+                'r' -> 13  // carriage return
+                '\\' -> 92 // backslash
+                '\'' -> 39 // single quote
+                '0' -> 0   // null character
+                else -> null
+            }
+        }
+        else -> null
+    }
+}
+
+/**
+ * Checks if a string is a valid character literal
+ */
+private fun isValidCharacterLiteral(literal: String): Boolean {
+    return parseCharacterLiteral(literal) != null
 }
 
 /**
@@ -358,10 +393,17 @@ class InstructionGenerator {
     }
     
     private fun generateWordInstruction(operand: String): List<LabelInstruction> {
-        return if (operand.toIntOrNull() != null) {
-            listOf(LabelInstruction(MemoryCell.Data(operand.toInt())))
-        } else {
-            listOf(LabelInstruction(MemoryCell.Data(), operand.lowercase()))
+        return when {
+            operand.toIntOrNull() != null -> {
+                listOf(LabelInstruction(MemoryCell.Data(operand.toInt())))
+            }
+            isValidCharacterLiteral(operand) -> {
+                val charValue = parseCharacterLiteral(operand)!!
+                listOf(LabelInstruction(MemoryCell.Data(charValue)))
+            }
+            else -> {
+                listOf(LabelInstruction(MemoryCell.Data(), operand.lowercase()))
+            }
         }
     }
     
@@ -387,10 +429,17 @@ class InstructionGenerator {
     }
     
     private fun generateLiteralInstruction(operand: String): List<LabelInstruction> {
-        return if (operand.toIntOrNull() != null) {
-            listOf(LabelInstruction(MemoryCell.OperandInstruction(Opcode.LIT, operand.toInt())))
-        } else {
-            listOf(LabelInstruction(MemoryCell.Instruction(Opcode.LIT), operand.lowercase()))
+        return when {
+            operand.toIntOrNull() != null -> {
+                listOf(LabelInstruction(MemoryCell.OperandInstruction(Opcode.LIT, operand.toInt())))
+            }
+            isValidCharacterLiteral(operand) -> {
+                val charValue = parseCharacterLiteral(operand)!!
+                listOf(LabelInstruction(MemoryCell.OperandInstruction(Opcode.LIT, charValue)))
+            }
+            else -> {
+                listOf(LabelInstruction(MemoryCell.Instruction(Opcode.LIT), operand.lowercase()))
+            }
         }
     }
     
