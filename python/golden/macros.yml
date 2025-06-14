@@ -25,6 +25,15 @@ in_stdin: |
   <no input>
 out_stdout: |-
   0
+memory: |-
+  0 - 00000001 - data 1
+  1 - 00000004 00000017 - lit 23
+  2 - 00000004 00000019 - lit 25
+  3 - 00000007 - add
+  4 - 00000004 00000000 - lit 0
+  5 - 00000005 - load
+  6 - 0000001B - out
+  7 - 0000001C - halt
 out_log: |
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 1 --> LIT 23
 

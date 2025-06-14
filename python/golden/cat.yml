@@ -26,6 +26,24 @@ in_stdin: |
   why did you write the bot in clojure?
 out_stdout: |
   why did you write the bot in clojure?
+memory: |-
+  0 - 00000001 - data 1
+  1 - 00000004 00000010 - lit 16
+  2 - 00000004 00000000 - lit 0
+  3 - 00000005 - load
+  4 - 0000001A - in
+  5 - 00000011 - over
+  6 - 00000015 - jz
+  7 - 00000004 00000010 - lit 16
+  8 - 00000010 - swap
+  9 - 00000004 00000000 - lit 0
+  10 - 00000005 - load
+  11 - 00000011 - over
+  12 - 0000001B - out
+  13 - 0000001A - in
+  14 - 00000004 00000005 - lit 5
+  15 - 00000017 - jump
+  16 - 0000001C - halt
 out_log: |+
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 1 --> LIT 16
 
@@ -1026,3 +1044,4 @@ out_log: |+
   PC: 5 AR: 5 BR: 16
 
 
+...

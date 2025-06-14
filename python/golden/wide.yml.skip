@@ -1,0 +1,478 @@
+in_source: |
+  .data
+  port:
+      word 1
+  num_a_low:
+      word -1 ; 0xFFFFFFFF (-1 signed)
+  num_a_high:
+      word 1
+  num_b_low:
+      word 2
+  num_b_high:
+      word 0
+  str_add:
+      string "A + B = "
+  str_sub:
+      string "A - B = "
+  str_mul:
+      string "A * B = "
+  str_result_sep:
+      string " (high, low): "
+  str_newline:
+      string "\n"
+
+  op_a_low: 
+      word 0
+  op_a_high:
+      word 0
+  op_b_low: 
+      word 0
+  op_b_high:
+      word 0
+  mul_a_l:
+      word 0
+  mul_a_h:
+      word 0
+  mul_b_l:
+      word 0
+  mul_b_h:
+      word 0
+
+  .text
+  start:
+      lit str_add
+      lit print_string
+      call
+      lit num_a_low
+      load
+      lit num_a_high
+      load
+      lit num_b_low
+      load
+      lit num_b_high
+      load
+      lit wadd
+      call
+      lit wprint
+      call
+
+      lit str_sub
+      lit print_string
+      call
+      lit num_a_low
+      load
+      lit num_a_high
+      load
+      lit num_b_low
+      load
+      lit num_b_high
+      load
+      lit wsub
+      call
+      lit wprint
+      call
+
+      lit str_mul
+      lit print_string
+      call
+      lit num_a_low
+      load
+      lit num_a_high
+      load
+      lit num_b_low
+      load
+      lit num_b_high
+      load
+      lit wmul
+      call
+      lit wprint
+      call
+
+      halt
+
+  wadd:
+      lit op_b_high
+      store
+      lit op_b_low
+      store
+      lit op_a_high
+      store
+      lit op_a_low
+      store
+      lit op_a_low
+      load
+      lit op_b_low
+      load
+      add
+      lit op_a_low
+      load
+      dup
+      lit wadd_a_neg
+      swap
+      jn
+  wadd_a_pos:
+      lit op_b_low
+      load
+      dup
+      lit wadd_b_neg_a_pos
+      swap
+      jn
+  wadd_a_pos_b_pos:
+      drop
+      dup
+      lit wadd_carry
+      swap
+      jn
+      lit 0
+      lit wadd_finish
+      jump
+  wadd_b_neg_a_pos:
+      drop
+      lit 0
+      lit wadd_finish
+      jump
+  wadd_a_neg:
+      lit op_b_low
+      load
+      dup
+      lit wadd_b_neg_a_neg
+      swap
+      jn
+  wadd_a_neg_b_pos:
+      drop
+      lit 0
+      lit wadd_finish
+      jump
+  wadd_b_neg_a_neg:
+      drop
+  wadd_carry:
+      lit 1
+  wadd_finish:
+      lit op_a_high
+      load
+      add
+      lit op_b_high
+      load
+      add
+      swap
+      ret
+
+  wsub:
+      lit op_b_high
+      store
+      lit op_b_low
+      store
+      lit op_a_high
+      store
+      lit op_a_low
+      store
+      lit op_a_low
+      load
+      dup
+      lit wsub_a_neg
+      swap
+      jn
+  wsub_a_pos:
+      lit op_b_low
+      load
+      dup
+      lit wsub_b_neg_a_pos
+      swap
+      jn
+  wsub_a_pos_b_pos:
+      sub
+      lit wsub_borrow
+      swap
+      jn
+      lit 0
+      lit wsub_finish
+      jump
+  wsub_b_neg_a_pos:
+      drop
+  wsub_borrow:
+      lit 1
+      lit wsub_finish
+      jump
+  wsub_a_neg:
+      lit op_b_low
+      load
+      dup
+      lit wsub_b_neg_a_neg
+      swap
+      jn
+  wsub_a_neg_b_pos:
+      drop
+      lit 0
+      lit wsub_finish
+      jump
+  wsub_b_neg_a_neg:
+      sub
+      lit wsub_borrow
+      swap
+      jn
+      lit 0
+  wsub_finish:
+      lit op_a_high
+      load
+      sub
+      lit op_b_high
+      load
+      sub
+      lit op_a_low
+      load
+      lit op_b_low
+      load
+      sub
+      swap
+      ret
+
+  wmul:
+      lit op_b_high
+      store
+      lit op_b_low
+      store
+      lit op_a_high
+      store
+      lit op_a_low
+      store
+      lit op_a_low
+      load
+      lit op_b_low
+      load
+      lit mul32x32_64
+      call
+      lit op_a_low
+      load
+      lit op_b_high
+      load
+      mul
+      lit op_a_high
+      load
+      lit op_b_low
+      load
+      mul
+      add
+      add
+      ret
+
+  mul32x32_64:
+      lit op_b_low
+      store
+      lit op_a_low
+      store
+      lit op_a_low
+      load
+      lit u_get_low16
+      call
+      lit mul_a_l
+      store
+      lit op_a_low
+      load
+      lit u_get_high16
+      call
+      lit mul_a_h
+      store
+      lit op_b_low
+      load
+      lit u_get_low16
+      call
+      lit mul_b_l
+      store
+      lit op_b_low
+      load
+      lit u_get_high16
+      call
+      lit mul_b_h
+      store
+      lit mul_a_l
+      load
+      lit mul_b_l
+      load
+      mul
+      lit mul_a_l
+      load
+      lit mul_b_h
+      load
+      mul
+      lit mul_a_h
+      load
+      lit mul_b_l
+      load
+      mul
+      add
+      lit mul_a_h
+      load
+      lit mul_b_h
+      load
+      mul
+      lit op_a_low
+      store
+      lit op_a_high
+      store
+      lit op_b_low
+      store
+      lit op_b_high
+      store
+      lit op_b_low
+      load
+      lit 65536
+      mul
+      lit op_b_high
+      load
+      add
+      lit op_a_low
+      load
+      lit op_a_high
+      load
+      lit wadd
+      call
+      ret
+
+  u_get_low16:
+      lit 65536
+      mod
+      dup
+      lit u_get_low_pos
+      swap
+      jn
+      lit 65536
+      add
+  u_get_low_pos:
+      ret
+
+  u_get_high16:
+      dup
+      lit u_get_high_pos
+      swap
+      jn
+      lit 65536
+      div
+      ret
+  u_get_high_pos:
+      lit 65536
+      div
+      dup
+      lit u_get_high_neg_div
+      swap
+      jn
+      ret
+  u_get_high_neg_div:
+      lit 65536
+      add
+      ret
+
+  wprint:
+      lit str_result_sep
+      lit print_string
+      call
+      dup
+      lit print_number
+      call
+      lit ','
+      lit 32
+      add
+      lit port
+      load
+      out
+      lit ' '
+      lit port
+      load
+      out
+      swap
+      drop
+      lit print_number
+      call
+      lit str_newline
+      lit print_string
+      call
+      ret
+
+  print_string:
+      dup
+      load
+      dup
+      lit 0
+      sub
+      lit print_str_end
+      swap
+      jz
+  print_str_loop:
+      over
+      inc
+      swap
+      dec
+      dup
+      lit print_str_end
+      swap
+      jz
+      swap
+      dup
+      load
+      lit port
+      load
+      out
+      swap
+      drop
+      drop
+      lit print_str_loop
+      jump
+  print_str_end:
+      drop
+      drop
+      ret
+
+  print_digit:
+      lit 48
+      add
+      lit port
+      load
+      out
+      ret
+  print_number:
+      lit -1
+      swap
+      dup
+      lit negate
+      swap
+      jn
+      lit loop1
+      jump
+  negate:
+      lit 45
+      lit port
+      load
+      out
+      lit -1
+      mul
+  loop1:
+      dup
+      lit 10
+      mod
+      swap
+      lit 10
+      div
+      over
+      lit loop1exit
+      swap
+      jz
+      swap
+      lit loop1
+      jump
+  loop1exit:
+      swap
+      drop
+  loop2:
+      dup
+      lit break
+      swap
+      jn
+      lit print_digit
+      call
+      lit loop2
+      jump
+  break:
+      ret
+in_stdin: |
+  <no input>
+out_stdout:
+out_log:
