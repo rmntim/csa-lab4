@@ -12,6 +12,9 @@ sealed class Token {
     data class Label(val name: String, val line: Int) : Token()
     data class Instruction(val opcode: Opcode, val operand: String?, val line: Int) : Token()
     data class Directive(val name: String, val operand: String?, val line: Int) : Token()
+    data class MacroDefinition(val name: String, val parameters: List<String>, val line: Int) : Token()
+    data class MacroCall(val name: String, val arguments: List<String>, val line: Int) : Token()
+    data class MacroEnd(val line: Int) : Token()
     object Empty : Token()
 }
 
@@ -31,6 +34,15 @@ enum class Section {
     TEXT,  // Code section
     DATA   // Data section
 }
+
+/**
+ * Represents a macro definition
+ */
+data class MacroDefinition(
+    val name: String,
+    val parameters: List<String>,
+    val body: List<String> // Raw lines of the macro body
+)
 
 /**
  * Configuration for instruction parsing
@@ -143,12 +155,19 @@ class AssemblyLexer {
     }
     
     private fun parseInstruction(instruction: String, lineNumber: Int): Token {
-        val parts = instruction.split(" ", limit = 2)
+        val parts = instruction.split(" ")
         val mnemonic = parts[0].lowercase()
-        val operand = if (parts.size > 1) parts[1] else null
+        val arguments = if (parts.size > 1) parts.drop(1) else emptyList()
         
         val config = INSTRUCTION_REGISTRY[mnemonic]
-            ?: throw SyntaxError("Unknown instruction '$mnemonic'", lineNumber)
+        
+        if (config == null) {
+            // If it's not a known instruction, it might be a macro call
+            return Token.MacroCall(mnemonic, arguments, lineNumber)
+        }
+        
+        // Handle regular instructions
+        val operand = if (arguments.isNotEmpty()) arguments.joinToString(" ") else null
         
         // Validate operand requirements
         when (config.type) {
@@ -190,12 +209,42 @@ class AssemblyLexer {
                     throw SyntaxError("Directive '$directiveName' does not accept operands", lineNumber)
                 }
             }
+            ".macro" -> {
+                if (operand.isNullOrBlank()) {
+                    throw SyntaxError("Directive '.macro' requires a name and optional parameters", lineNumber)
+                }
+                return parseMacroDefinition(operand, lineNumber)
+            }
+            ".endmacro" -> {
+                if (operand != null) {
+                    throw SyntaxError("Directive '.endmacro' does not accept operands", lineNumber)
+                }
+                return Token.MacroEnd(lineNumber)
+            }
             else -> {
                 throw SyntaxError("Unknown directive '$directiveName'", lineNumber)
             }
         }
         
         return Token.Directive(directiveName, operand, lineNumber)
+    }
+    
+    private fun parseMacroDefinition(operand: String, lineNumber: Int): Token {
+        val parts = operand.split(" ")
+        val macroName = parts[0]
+        val parameters = if (parts.size > 1) parts.drop(1) else emptyList()
+        
+        if (!isValidLabel(macroName)) {
+            throw SyntaxError("Invalid macro name '$macroName'", lineNumber)
+        }
+        
+        for (param in parameters) {
+            if (!isValidLabel(param)) {
+                throw SyntaxError("Invalid parameter name '$param'", lineNumber)
+            }
+        }
+        
+        return Token.MacroDefinition(macroName, parameters, lineNumber)
     }
 }
 
@@ -211,6 +260,88 @@ data class MemorySegment(
     val startAddress: Int,
     val instructions: MutableList<LabelInstruction> = mutableListOf()
 )
+
+/**
+ * Macro preprocessor for expanding macro calls
+ */
+class MacroPreprocessor {
+    private val macros = mutableMapOf<String, MacroDefinition>()
+    
+    fun preprocess(tokens: List<Token>): List<Token> {
+        val processedTokens = mutableListOf<Token>()
+        var i = 0
+        
+        while (i < tokens.size) {
+            when (val token = tokens[i]) {
+                is Token.MacroDefinition -> {
+                    // Collect macro body until .endmacro
+                    val macroBody = mutableListOf<String>()
+                    i++ // Skip the macro definition token
+                    
+                    while (i < tokens.size) {
+                        val bodyToken = tokens[i]
+                        if (bodyToken is Token.MacroEnd) {
+                            break
+                        }
+                        // Convert token back to source line for storage
+                        macroBody.add(tokenToSourceLine(bodyToken))
+                        i++
+                    }
+                    
+                    if (i >= tokens.size) {
+                        throw SyntaxError("Macro '${token.name}' not closed with .endmacro", token.line)
+                    }
+                    
+                    macros[token.name] = MacroDefinition(token.name, token.parameters, macroBody)
+                }
+                is Token.MacroCall -> {
+                    val macro = macros[token.name]
+                        ?: throw SyntaxError("Undefined macro '${token.name}'", token.line)
+                    
+                    if (macro.parameters.size != token.arguments.size) {
+                        throw SyntaxError("Macro '${token.name}' expects ${macro.parameters.size} arguments, got ${token.arguments.size}", token.line)
+                    }
+                    
+                    // Expand macro
+                    val expandedLines = expandMacro(macro, token.arguments)
+                    val lexer = AssemblyLexer()
+                    val expandedTokens = lexer.tokenize(expandedLines.joinToString("\n"))
+                    processedTokens.addAll(expandedTokens)
+                }
+                is Token.MacroEnd -> {
+                    throw SyntaxError("Unexpected .endmacro without matching .macro", token.line)
+                }
+                else -> {
+                    processedTokens.add(token)
+                }
+            }
+            i++
+        }
+        
+        return processedTokens
+    }
+    
+    private fun expandMacro(macro: MacroDefinition, arguments: List<String>): List<String> {
+        val paramMap = macro.parameters.zip(arguments).toMap()
+        
+        return macro.body.map { line ->
+            var expandedLine = line
+            for ((param, arg) in paramMap) {
+                expandedLine = expandedLine.replace("\\b$param\\b".toRegex(), arg)
+            }
+            expandedLine
+        }
+    }
+    
+    private fun tokenToSourceLine(token: Token): String {
+        return when (token) {
+            is Token.Label -> "${token.name}:"
+            is Token.Instruction -> "${token.opcode.name.lowercase()}${if (token.operand != null) " ${token.operand}" else ""}"
+            is Token.Directive -> "${token.name}${if (token.operand != null) " ${token.operand}" else ""}"
+            else -> ""
+        }
+    }
+}
 
 /**
  * Instruction generator for converting tokens to machine code
@@ -315,6 +446,9 @@ class AssemblyParser {
                     val generated = instructionGenerator.generateInstruction(token)
                     currentSegment.instructions.addAll(generated)
                     currentAddress += generated.size
+                }
+                is Token.MacroDefinition, is Token.MacroCall, is Token.MacroEnd -> {
+                    throw SyntaxError("Macro tokens should have been preprocessed", 0)
                 }
                 else -> { /* Skip comments and empty tokens */ }
             }
@@ -425,13 +559,15 @@ class CodeGenerator {
  */
 class AssemblyTranslator {
     private val lexer = AssemblyLexer()
+    private val macroPreprocessor = MacroPreprocessor()
     private val parser = AssemblyParser()
     private val codeGenerator = CodeGenerator()
     
     fun translate(source: String): Program {
         try {
             val tokens = lexer.tokenize(source)
-            val parseResult = parser.parse(tokens)
+            val preprocessedTokens = macroPreprocessor.preprocess(tokens)
+            val parseResult = parser.parse(preprocessedTokens)
             return codeGenerator.generate(parseResult)
         } catch (e: SyntaxError) {
             throw TranslationException("Syntax error at line ${e.line}: ${e.message}")
