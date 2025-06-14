@@ -1,6 +1,8 @@
 in_source: |
+  .data
   res:
           word 0      ; result accumulator
+  .text
   fac:
           dup         ; Stack: arg arg
           lit 1       ; Stack: arg arg 1
@@ -1027,4 +1029,3 @@ out_log: |+
   PC: 6 AR: 6 BR: 9
 
 
-...

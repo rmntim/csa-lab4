@@ -1,10 +1,11 @@
 in_source: |
+  .data
   port:
       word 1
-
   max_palindrome:
       word 0
 
+  .text
   start:
       lit 999             ; i
   outer_loop:
@@ -69,10 +70,12 @@ in_source: |
       call                ; 
       halt
 
+  .data
   orig:
       word 0
   rev:
       word 0
+  .text
   is_palindrome:
       dup                         ; arg arg
       lit orig                    ; arg arg orig_addr

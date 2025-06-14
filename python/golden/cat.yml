@@ -1,6 +1,8 @@
 in_source: |
+  .data
   port:
           word 1      ; first i/o port
+  .text
   start:
           lit break   ; stack: break
           lit port    ; break port_addr
@@ -1024,4 +1026,3 @@ out_log: |+
   PC: 5 AR: 5 BR: 16
 
 
-...

@@ -1,9 +1,11 @@
 in_source: |
+  .data
   port:
                   word 1
   hello_str:
                   string "Hello, what is your name?\n"
 
+  .text
   print_char:
                   lit port        ; symbol port_addr
                   load            ; symbol port
@@ -38,8 +40,10 @@ in_source: |
                   in              ; in_symbol
                   ret             ; in_symbol
 
+  .data
   length_addr:
                   word 0
+  .text
 
   read_string:
                   dup             ; str_addr str_addr
@@ -96,6 +100,7 @@ in_source: |
 
                   halt            ;
 
+  .data
   user_input:
                   buf 30
 
