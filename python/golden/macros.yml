@@ -1,0 +1,395 @@
+in_source: |
+  .macro add_two_numbers num1 num2
+      lit num1
+      lit num2
+      add
+  .endmacro
+
+  .macro print_number
+      lit port
+      load
+      out
+  .endmacro
+
+  .data
+  port:
+      word 1
+
+  .text
+  start:
+      add_two_numbers 23 25
+      print_number
+      halt
+
+in_stdin: |
+  <no input>
+out_stdout: |-
+  0
+out_log: |
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 1 --> LIT 23
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 0 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 1): [0 | ]
+
+  Return stack (size = 0): []
+
+  PC: 1 AR: 1 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 1 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 1): [0 | ]
+
+  Return stack (size = 0): []
+
+  PC: 1 AR: 1 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 2 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 2): [0 | 0]
+
+  Return stack (size = 0): []
+
+  PC: 1 AR: 1 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 3 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+
+  Stack (size = 2): [23 | 0]
+
+  Return stack (size = 0): []
+
+  PC: 2 AR: 1 BR: 0
+
+  MEMORY READ VALUE: AR: 1 ---> OperandInstruction(opcode=LIT, operand=23)
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 2 --> LIT 25
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 4 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 2): [23 | 0]
+
+  Return stack (size = 0): []
+
+  PC: 2 AR: 2 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 5 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 2): [23 | 0]
+
+  Return stack (size = 0): []
+
+  PC: 2 AR: 2 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 6 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 3): [23 | 23, 0]
+
+  Return stack (size = 0): []
+
+  PC: 2 AR: 2 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 7 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+
+  Stack (size = 3): [25 | 23, 0]
+
+  Return stack (size = 0): []
+
+  PC: 3 AR: 2 BR: 0
+
+  MEMORY READ VALUE: AR: 2 ---> OperandInstruction(opcode=LIT, operand=25)
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 3 --> ADD
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 8 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 3): [25 | 23, 0]
+
+  Return stack (size = 0): []
+
+  PC: 3 AR: 3 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 9 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 3): [25 | 23, 0]
+
+  Return stack (size = 0): []
+
+  PC: 3 AR: 3 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 10 -- MPC: 12 / MicroInstruction: ALUSum, ALULeftOPDataStack, TOSSelectALU, LatchTOS, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 3): [48 | 23, 0]
+
+  Return stack (size = 0): []
+
+  PC: 3 AR: 3 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 11 -- MPC: 13 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+
+  Stack (size = 2): [48 | 0]
+
+  Return stack (size = 0): []
+
+  PC: 4 AR: 3 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 4 --> LIT 0
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 12 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 2): [48 | 0]
+
+  Return stack (size = 0): []
+
+  PC: 4 AR: 4 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 13 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 2): [48 | 0]
+
+  Return stack (size = 0): []
+
+  PC: 4 AR: 4 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 14 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 3): [48 | 48, 0]
+
+  Return stack (size = 0): []
+
+  PC: 4 AR: 4 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 15 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+
+  Stack (size = 3): [0 | 48, 0]
+
+  Return stack (size = 0): []
+
+  PC: 5 AR: 4 BR: 0
+
+  MEMORY READ VALUE: AR: 4 ---> OperandInstruction(opcode=LIT, operand=0)
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 5 --> LOAD
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 16 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 3): [0 | 48, 0]
+
+  Return stack (size = 0): []
+
+  PC: 5 AR: 5 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 17 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 3): [0 | 48, 0]
+
+  Return stack (size = 0): []
+
+  PC: 5 AR: 5 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 18 -- MPC: 5 / MicroInstruction: LatchAR, ARSelectTOS, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 3): [0 | 48, 0]
+
+  Return stack (size = 0): []
+
+  PC: 5 AR: 0 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 19 -- MPC: 6 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+
+  Stack (size = 3): [1 | 48, 0]
+
+  Return stack (size = 0): []
+
+  PC: 6 AR: 0 BR: 0
+
+  MEMORY READ VALUE: AR: 0 ---> Data(value=1)
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 6 --> OUT
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 20 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 3): [1 | 48, 0]
+
+  Return stack (size = 0): []
+
+  PC: 6 AR: 6 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 21 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 3): [1 | 48, 0]
+
+  Return stack (size = 0): []
+
+  PC: 6 AR: 6 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.IOController - I/O OPERATION OCCURS (OUT): port: 1 <--- value: 48
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 22 -- MPC: 62 / MicroInstruction: Output, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 3): [1 | 48, 0]
+
+  Return stack (size = 0): []
+
+  PC: 6 AR: 6 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 23 -- MPC: 63 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 2): [1 | 0]
+
+  Return stack (size = 0): []
+
+  PC: 6 AR: 6 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 24 -- MPC: 64 / MicroInstruction: LatchTOS, TOSSelectDS, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 2): [0 | 0]
+
+  Return stack (size = 0): []
+
+  PC: 6 AR: 6 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 25 -- MPC: 65 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+
+  Stack (size = 1): [0 | ]
+
+  Return stack (size = 0): []
+
+  PC: 7 AR: 6 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 7 --> HALT
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 26 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 1): [0 | ]
+
+  Return stack (size = 0): []
+
+  PC: 7 AR: 7 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - [HALTED]
+
+  Memory Dump:
+
+  0: Data(value=1)
+
+  1: OperandInstruction(opcode=LIT, operand=23)
+
+  2: OperandInstruction(opcode=LIT, operand=25)
+
+  3: Instruction(opcode=ADD)
+
+  4: OperandInstruction(opcode=LIT, operand=0)
+
+  5: Instruction(opcode=LOAD)
+
+  6: Instruction(opcode=OUT)
+
+  7: Instruction(opcode=HALT)
