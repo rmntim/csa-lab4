@@ -642,5 +642,65 @@ class NoSuchLabelException(val label: String) : Exception("No such label: $label
 fun translateAsm(filename: String): Program {
     val source = File(filename).readText(Charsets.UTF_8)
     val translator = AssemblyTranslator()
-    return translator.translate(source)
+    val program = translator.translate(source)
+    
+    // Generate debug output
+    val debugOutputFile = filename.replaceAfterLast('.', "debug")
+    generateDebugOutput(program, debugOutputFile)
+    
+    return program
+}
+
+/**
+ * Generates debug output file with instruction details
+ */
+private fun generateDebugOutput(program: Program, outputFile: String) {
+    val debugOutput = mutableListOf<String>()
+    
+    for (address in program.program.indices) {
+        val instruction = program.program[address]
+        val hexCode = formatInstructionAsHex(instruction)
+        val mnemonic = formatInstructionAsMnemonic(instruction)
+        debugOutput.add("$address - $hexCode - $mnemonic")
+    }
+    
+    File(outputFile).writeText(debugOutput.joinToString("\n"))
+}
+
+/**
+ * Formats instruction as hexadecimal string
+ */
+private fun formatInstructionAsHex(instruction: MemoryCell): String {
+    return when (instruction) {
+        is MemoryCell.Instruction -> {
+            val opcodeValue = instruction.opcode.ordinal
+            String.format("%08X", opcodeValue)
+        }
+        is MemoryCell.OperandInstruction -> {
+            val opcodeValue = instruction.opcode.ordinal
+            val operandValue = instruction.operand
+            String.format("%08X %08X", opcodeValue, operandValue)
+        }
+        is MemoryCell.Data -> {
+            String.format("%08X", instruction.value)
+        }
+    }
+}
+
+/**
+ * Formats instruction as mnemonic string
+ */
+private fun formatInstructionAsMnemonic(instruction: MemoryCell): String {
+    return when (instruction) {
+        is MemoryCell.Instruction -> {
+            instruction.opcode.name.lowercase()
+        }
+        is MemoryCell.OperandInstruction -> {
+            val opcodeName = instruction.opcode.name.lowercase()
+            "${opcodeName} ${instruction.operand}"
+        }
+        is MemoryCell.Data -> {
+            "data ${instruction.value}"
+        }
+    }
 }
