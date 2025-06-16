@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD013 -->
+
 # Computer Systems and Architecture Labwork №4
 
 **Выполнил:** Тимошкин Роман Вячеславович, группа P3231
