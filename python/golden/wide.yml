@@ -1,0 +1,1563 @@
+in_source: |
+  .data
+      ; Тестовые 64-битные числа (little-endian: младшее слово первое)
+      num1_lo:
+          word 2147483647  ; Младшие 32 бита первого числа (0x7FFFFFFF)
+      num1_hi:
+          word 1           ; Старшие 32 бита первого числа (всего: 6442450943)
+
+      num2_lo:
+          word 2           ; Младшие 32 бита второго числа
+      num2_hi:
+          word 1           ; Старшие 32 бита второго числа (всего: 4294967298)
+
+      result_lo:
+          word 0           ; Младшие 32 бита результата
+      result_hi:
+          word 0           ; Старшие 32 бита результата
+
+      port:
+          word 1
+
+      ; Временные переменные для 64-битной арифметики
+      temp_a_lo:
+          word 0
+      temp_a_hi:
+          word 0
+      temp_b_lo:
+          word 0
+      temp_b_hi:
+          word 0
+
+  .text
+  start:
+      ; Демонстрация сложения 64-битных чисел
+      lit num1_lo
+      load                ; num1_lo_val
+      lit num1_hi
+      load                ; num1_lo_val num1_hi_val
+      lit num2_lo
+      load                ; num1_lo_val num1_hi_val num2_lo_val
+      lit num2_hi
+      load                ; num1_lo_val num1_hi_val num2_lo_val num2_hi_val
+
+      lit add64
+      call                ; result_lo result_hi
+
+      ; Сохраним результат
+      dup                 ; result_lo result_hi result_hi
+      lit result_hi
+      store               ; result_lo result_hi
+      drop                ; result_lo
+      dup                 ; result_lo result_lo
+      lit result_lo
+      store               ; result_lo
+      drop                ;
+
+      ; Выведем "ADD: "
+      lit 65              ; 'A'
+      lit port
+      load
+      out
+      lit 68              ; 'D'
+      lit port
+      load
+      out
+      lit 68              ; 'D'
+      lit port
+      load
+      out
+      lit 58              ; ':'
+      lit port
+      load
+      out
+      lit 32              ; ' '
+      lit port
+      load
+      out
+
+      ; Выведем старшую часть результата
+      lit result_hi
+      load
+      lit print_number
+      call
+
+      ; Выведем разделитель
+      lit 44              ; ','
+      lit port
+      load
+      out
+      lit 32              ; ' '
+      lit port
+      load
+      out
+
+      ; Выведем младшую часть результата
+      lit result_lo
+      load
+      lit print_number
+      call
+
+      lit 10              ; новая строка
+      lit port
+      load
+      out
+
+      ; Демонстрация вычитания 64-битных чисел
+      lit num1_lo
+      load                ; num1_lo_val
+      lit num1_hi
+      load                ; num1_lo_val num1_hi_val
+      lit num2_lo
+      load                ; num2_lo_val
+      lit num2_hi
+      load                ; num1_lo_val num1_hi_val num2_lo_val num2_hi_val
+
+      lit sub64
+      call                ; result_lo result_hi
+
+      ; Выведем "SUB: "
+      lit 83              ; 'S'
+      lit port
+      load
+      out
+      lit 85              ; 'U'
+      lit port
+      load
+      out
+      lit 66              ; 'B'
+      lit port
+      load
+      out
+      lit 58              ; ':'
+      lit port
+      load
+      out
+      lit 32              ; ' '
+      lit port
+      load
+      out
+
+      ; Выведем результат вычитания
+      lit print_number
+      call                ; result_lo
+
+      lit 44              ; ','
+      lit port
+      load
+      out
+      lit 32              ; ' '
+      lit port
+      load
+      out
+
+      lit print_number
+      call
+
+      halt
+
+  ; Сложение 64-битных чисел
+  ; Вход: [a_lo a_hi b_lo b_hi]
+  ; Выход: [result_lo result_hi]
+  add64:
+      ; Сохраним входные данные во временные переменные
+      lit temp_b_hi
+      store               ; a_lo a_hi b_lo
+      lit temp_b_lo
+      store               ; a_lo a_hi
+      lit temp_a_hi
+      store               ; a_lo
+      lit temp_a_lo
+      store               ;
+
+      ; Сложение младших частей
+      lit temp_a_lo
+      load                ; a_lo
+      lit temp_b_lo
+      load                ; a_lo b_lo
+      add                 ; sum_lo
+
+      ; Проверка переполнения
+      ; Если sum_lo < a_lo, был перенос
+      dup                 ; sum_lo sum_lo
+      lit temp_a_lo
+      load                ; sum_lo sum_lo a_lo
+      over                ; sum_lo sum_lo a_lo sum_lo
+      swap                ; sum_lo sum_lo sum_lo a_lo
+      sub                 ; sum_lo sum_lo (sum_lo - a_lo)
+
+      ; Если результат отрицательный, переполнения не было
+      lit no_carry_add
+      swap                ; sum_lo sum_lo no_carry_add (sum_lo - a_lo)
+      jn                  ; sum_lo sum_lo
+
+      ; Проверяем также с b_lo
+      dup                 ; sum_lo sum_lo sum_lo
+      lit temp_b_lo
+      load                ; sum_lo sum_lo sum_lo b_lo
+      swap                ; sum_lo sum_lo b_lo sum_lo
+      sub                 ; sum_lo sum_lo (b_lo - sum_lo)
+
+      lit carry_add
+      swap                ; sum_lo sum_lo carry_add (b_lo - sum_lo)
+      jn                  ; sum_lo sum_lo
+
+  no_carry_add:
+      drop                ; sum_lo
+      ; Не было переноса
+      lit temp_a_hi
+      load                ; sum_lo a_hi
+      lit temp_b_hi
+      load                ; sum_lo a_hi b_hi
+      add                 ; sum_lo sum_hi
+      ret                 ; sum_lo sum_hi
+
+  carry_add:
+      drop                ; sum_lo
+      ; Был перенос
+      lit temp_a_hi
+      load                ; sum_lo a_hi
+      lit temp_b_hi
+      load                ; sum_lo a_hi b_hi
+      add                 ; sum_lo sum_hi_temp
+      inc                 ; sum_lo sum_hi (с переносом)
+      ret                 ; sum_lo sum_hi
+
+  ; Вычитание 64-битных чисел
+  ; Вход: [a_lo a_hi b_lo b_hi]
+  ; Выход: [result_lo result_hi]
+  sub64:
+      ; Сохраним входные данные во временные переменные
+      lit temp_b_hi
+      store               ; a_lo a_hi b_lo
+      lit temp_b_lo
+      store               ; a_lo a_hi
+      lit temp_a_hi
+      store               ; a_lo
+      lit temp_a_lo
+      store               ;
+
+      ; Вычитание младших частей
+      lit temp_a_lo
+      load                ; a_lo
+      lit temp_b_lo
+      load                ; a_lo b_lo
+      sub                 ; diff_lo
+
+      ; Проверка заема: если diff_lo отрицательное, был заем
+      dup                 ; diff_lo diff_lo
+      lit borrow_sub
+      swap                ; diff_lo borrow_sub diff_lo
+      jn                  ; diff_lo
+
+      ; Не было заема
+      lit temp_a_hi
+      load                ; diff_lo a_hi
+      lit temp_b_hi
+      load                ; diff_lo a_hi b_hi
+      sub                 ; diff_lo diff_hi
+      ret                 ; diff_lo diff_hi
+
+  borrow_sub:
+      ; Был заем
+      lit temp_a_hi
+      load                ; diff_lo a_hi
+      dec                 ; diff_lo (a_hi-1)
+      lit temp_b_hi
+      load                ; diff_lo (a_hi-1) b_hi
+      sub                 ; diff_lo diff_hi
+      ret                 ; diff_lo diff_hi
+
+  ; Функция вывода числа (из примера)
+  print_digit:
+      lit 48              ; arg 48
+      add                 ; arg -> char
+      lit port            ; char port_addr
+      load                ; char port
+      out                 ;
+      ret                 ;
+
+  print_number:
+      lit -1              ; num -1
+      swap                ; -1 num
+      dup                 ; -1 num num
+      lit negate          ; -1 num num negate
+      swap                ; -1 num negate num
+      jn                  ; -1 num
+      lit loop1           ; -1 num loop1
+      jump                ; -1 num
+  negate:
+      lit 45              ; [...] 45
+      lit port            ; [...] 45 port_a
+      load                ; [...] 45 port
+      out                 ; [...]
+      lit -1              ; 0 num -1
+      mul                 ; 0 -num -> num
+  loop1:
+      dup                 ; 0 num num
+      lit 10              ; 0 num num 10
+      mod                 ; 0 num digit
+      swap                ; 0 digit num
+      lit 10              ; 0 digit num 10
+      div                 ; 0 digit num/10 -> num
+      over                ; 0 num digit num
+      lit loop1exit       ; [...] num loop2
+      swap                ; [...] loop2 num
+      jz                  ; [...] num digit
+      swap
+      lit loop1           ; [...] num loop1
+      jump                ; [...] num
+  loop1exit:
+      swap                ; [...] 0 digit
+      drop                ; [...] digit
+  loop2:
+      dup                 ; digit digit
+      lit break           ; digit digit break
+      swap                ; digit break digit
+      jn                  ; digit
+      lit print_digit     ; digit print_digit
+      call                ; digit
+      lit loop2           ; loop2
+      jump                ;
+  break:
+      drop
+      ret                 ;
+in_stdin: |
+  <no input>
+out_stdout: |-
+  ADD: 2, -2147483647
+  SUB: 0, 2147483645
+memory: |-
+  0 - 7fffffff - data 2147483647
+  1 - 00000001 - data 1
+  2 - 00000002 - data 2
+  3 - 00000001 - data 1
+  4 - 00000000 - data 0
+  5 - 00000000 - data 0
+  6 - 00000001 - data 1
+  7 - 00000000 - data 0
+  8 - 00000000 - data 0
+  9 - 00000000 - data 0
+  10 - 00000000 - data 0
+  11 - 00000004 00000000 - lit 0
+  12 - 00000005 - load
+  13 - 00000004 00000001 - lit 1
+  14 - 00000005 - load
+  15 - 00000004 00000002 - lit 2
+  16 - 00000005 - load
+  17 - 00000004 00000003 - lit 3
+  18 - 00000005 - load
+  19 - 00000004 00000070 - lit 112
+  20 - 00000018 - call
+  21 - 0000000f - dup
+  22 - 00000004 00000005 - lit 5
+  23 - 00000006 - store
+  24 - 0000000e - drop
+  25 - 0000000f - dup
+  26 - 00000004 00000004 - lit 4
+  27 - 00000006 - store
+  28 - 0000000e - drop
+  29 - 00000004 00000041 - lit 65
+  30 - 00000004 00000006 - lit 6
+  31 - 00000005 - load
+  32 - 0000001b - out
+  33 - 00000004 00000044 - lit 68
+  34 - 00000004 00000006 - lit 6
+  35 - 00000005 - load
+  36 - 0000001b - out
+  37 - 00000004 00000044 - lit 68
+  38 - 00000004 00000006 - lit 6
+  39 - 00000005 - load
+  40 - 0000001b - out
+  41 - 00000004 0000003a - lit 58
+  42 - 00000004 00000006 - lit 6
+  43 - 00000005 - load
+  44 - 0000001b - out
+  45 - 00000004 00000020 - lit 32
+  46 - 00000004 00000006 - lit 6
+  47 - 00000005 - load
+  48 - 0000001b - out
+  49 - 00000004 00000005 - lit 5
+  50 - 00000005 - load
+  51 - 00000004 000000c1 - lit 193
+  52 - 00000018 - call
+  53 - 00000004 0000002c - lit 44
+  54 - 00000004 00000006 - lit 6
+  55 - 00000005 - load
+  56 - 0000001b - out
+  57 - 00000004 00000020 - lit 32
+  58 - 00000004 00000006 - lit 6
+  59 - 00000005 - load
+  60 - 0000001b - out
+  61 - 00000004 00000004 - lit 4
+  62 - 00000005 - load
+  63 - 00000004 000000c1 - lit 193
+  64 - 00000018 - call
+  65 - 00000004 0000000a - lit 10
+  66 - 00000004 00000006 - lit 6
+  67 - 00000005 - load
+  68 - 0000001b - out
+  69 - 00000004 00000000 - lit 0
+  70 - 00000005 - load
+  71 - 00000004 00000001 - lit 1
+  72 - 00000005 - load
+  73 - 00000004 00000002 - lit 2
+  74 - 00000005 - load
+  75 - 00000004 00000003 - lit 3
+  76 - 00000005 - load
+  77 - 00000004 0000009d - lit 157
+  78 - 00000018 - call
+  79 - 00000004 00000053 - lit 83
+  80 - 00000004 00000006 - lit 6
+  81 - 00000005 - load
+  82 - 0000001b - out
+  83 - 00000004 00000055 - lit 85
+  84 - 00000004 00000006 - lit 6
+  85 - 00000005 - load
+  86 - 0000001b - out
+  87 - 00000004 00000042 - lit 66
+  88 - 00000004 00000006 - lit 6
+  89 - 00000005 - load
+  90 - 0000001b - out
+  91 - 00000004 0000003a - lit 58
+  92 - 00000004 00000006 - lit 6
+  93 - 00000005 - load
+  94 - 0000001b - out
+  95 - 00000004 00000020 - lit 32
+  96 - 00000004 00000006 - lit 6
+  97 - 00000005 - load
+  98 - 0000001b - out
+  99 - 00000004 000000c1 - lit 193
+  100 - 00000018 - call
+  101 - 00000004 0000002c - lit 44
+  102 - 00000004 00000006 - lit 6
+  103 - 00000005 - load
+  104 - 0000001b - out
+  105 - 00000004 00000020 - lit 32
+  106 - 00000004 00000006 - lit 6
+  107 - 00000005 - load
+  108 - 0000001b - out
+  109 - 00000004 000000c1 - lit 193
+  110 - 00000018 - call
+  111 - 0000001c - halt
+  112 - 00000004 0000000a - lit 10
+  113 - 00000006 - store
+  114 - 00000004 00000009 - lit 9
+  115 - 00000006 - store
+  116 - 00000004 00000008 - lit 8
+  117 - 00000006 - store
+  118 - 00000004 00000007 - lit 7
+  119 - 00000006 - store
+  120 - 00000004 00000007 - lit 7
+  121 - 00000005 - load
+  122 - 00000004 00000009 - lit 9
+  123 - 00000005 - load
+  124 - 00000007 - add
+  125 - 0000000f - dup
+  126 - 00000004 00000007 - lit 7
+  127 - 00000005 - load
+  128 - 00000011 - over
+  129 - 00000010 - swap
+  130 - 00000008 - sub
+  131 - 00000004 0000008e - lit 142
+  132 - 00000010 - swap
+  133 - 00000016 - jn
+  134 - 0000000f - dup
+  135 - 00000004 00000009 - lit 9
+  136 - 00000005 - load
+  137 - 00000010 - swap
+  138 - 00000008 - sub
+  139 - 00000004 00000095 - lit 149
+  140 - 00000010 - swap
+  141 - 00000016 - jn
+  142 - 0000000e - drop
+  143 - 00000004 00000008 - lit 8
+  144 - 00000005 - load
+  145 - 00000004 0000000a - lit 10
+  146 - 00000005 - load
+  147 - 00000007 - add
+  148 - 00000019 - ret
+  149 - 0000000e - drop
+  150 - 00000004 00000008 - lit 8
+  151 - 00000005 - load
+  152 - 00000004 0000000a - lit 10
+  153 - 00000005 - load
+  154 - 00000007 - add
+  155 - 0000000c - inc
+  156 - 00000019 - ret
+  157 - 00000004 0000000a - lit 10
+  158 - 00000006 - store
+  159 - 00000004 00000009 - lit 9
+  160 - 00000006 - store
+  161 - 00000004 00000008 - lit 8
+  162 - 00000006 - store
+  163 - 00000004 00000007 - lit 7
+  164 - 00000006 - store
+  165 - 00000004 00000007 - lit 7
+  166 - 00000005 - load
+  167 - 00000004 00000009 - lit 9
+  168 - 00000005 - load
+  169 - 00000008 - sub
+  170 - 0000000f - dup
+  171 - 00000004 000000b4 - lit 180
+  172 - 00000010 - swap
+  173 - 00000016 - jn
+  174 - 00000004 00000008 - lit 8
+  175 - 00000005 - load
+  176 - 00000004 0000000a - lit 10
+  177 - 00000005 - load
+  178 - 00000008 - sub
+  179 - 00000019 - ret
+  180 - 00000004 00000008 - lit 8
+  181 - 00000005 - load
+  182 - 0000000d - dec
+  183 - 00000004 0000000a - lit 10
+  184 - 00000005 - load
+  185 - 00000008 - sub
+  186 - 00000019 - ret
+  187 - 00000004 00000030 - lit 48
+  188 - 00000007 - add
+  189 - 00000004 00000006 - lit 6
+  190 - 00000005 - load
+  191 - 0000001b - out
+  192 - 00000019 - ret
+  193 - 00000004 ffffffff - lit -1
+  194 - 00000010 - swap
+  195 - 0000000f - dup
+  196 - 00000004 000000c9 - lit 201
+  197 - 00000010 - swap
+  198 - 00000016 - jn
+  199 - 00000004 000000cf - lit 207
+  200 - 00000017 - jump
+  201 - 00000004 0000002d - lit 45
+  202 - 00000004 00000006 - lit 6
+  203 - 00000005 - load
+  204 - 0000001b - out
+  205 - 00000004 ffffffff - lit -1
+  206 - 00000009 - mul
+  207 - 0000000f - dup
+  208 - 00000004 0000000a - lit 10
+  209 - 0000000b - mod
+  210 - 00000010 - swap
+  211 - 00000004 0000000a - lit 10
+  212 - 0000000a - div
+  213 - 00000011 - over
+  214 - 00000004 000000dc - lit 220
+  215 - 00000010 - swap
+  216 - 00000015 - jz
+  217 - 00000010 - swap
+  218 - 00000004 000000cf - lit 207
+  219 - 00000017 - jump
+  220 - 00000010 - swap
+  221 - 0000000e - drop
+  222 - 0000000f - dup
+  223 - 00000004 000000e6 - lit 230
+  224 - 00000010 - swap
+  225 - 00000016 - jn
+  226 - 00000004 000000bb - lit 187
+  227 - 00000018 - call
+  228 - 00000004 000000de - lit 222
+  229 - 00000017 - jump
+  230 - 0000000e - drop
+  231 - 00000019 - ret
+out_log: |+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 11 --> LIT 0
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 0 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 1): [0 | ]
+
+  Return stack (size = 0): []
+
+  PC: 11 AR: 11 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 1 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 1): [0 | ]
+
+  Return stack (size = 0): []
+
+  PC: 11 AR: 11 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 2 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 2): [0 | 0]
+
+  Return stack (size = 0): []
+
+  PC: 11 AR: 11 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 3 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+
+  Stack (size = 2): [0 | 0]
+
+  Return stack (size = 0): []
+
+  PC: 12 AR: 11 BR: 0
+
+  MEMORY READ VALUE: AR: 11 ---> OperandInstruction(opcode=LIT, operand=0)
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 12 --> LOAD
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 4 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 2): [0 | 0]
+
+  Return stack (size = 0): []
+
+  PC: 12 AR: 12 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 5 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 2): [0 | 0]
+
+  Return stack (size = 0): []
+
+  PC: 12 AR: 12 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 6 -- MPC: 5 / MicroInstruction: LatchAR, ARSelectTOS, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 2): [0 | 0]
+
+  Return stack (size = 0): []
+
+  PC: 12 AR: 0 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 7 -- MPC: 6 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+
+  Stack (size = 2): [2147483647 | 0]
+
+  Return stack (size = 0): []
+
+  PC: 13 AR: 0 BR: 0
+
+  MEMORY READ VALUE: AR: 0 ---> Data(value=2147483647)
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 13 --> LIT 1
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 8 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 2): [2147483647 | 0]
+
+  Return stack (size = 0): []
+
+  PC: 13 AR: 13 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 9 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 2): [2147483647 | 0]
+
+  Return stack (size = 0): []
+
+  PC: 13 AR: 13 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 10 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 3): [2147483647 | 2147483647, 0]
+
+  Return stack (size = 0): []
+
+  PC: 13 AR: 13 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 11 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+
+  Stack (size = 3): [1 | 2147483647, 0]
+
+  Return stack (size = 0): []
+
+  PC: 14 AR: 13 BR: 0
+
+  MEMORY READ VALUE: AR: 13 ---> OperandInstruction(opcode=LIT, operand=1)
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 14 --> LOAD
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 12 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 3): [1 | 2147483647, 0]
+
+  Return stack (size = 0): []
+
+  PC: 14 AR: 14 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 13 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 3): [1 | 2147483647, 0]
+
+  Return stack (size = 0): []
+
+  PC: 14 AR: 14 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 14 -- MPC: 5 / MicroInstruction: LatchAR, ARSelectTOS, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 3): [1 | 2147483647, 0]
+
+  Return stack (size = 0): []
+
+  PC: 14 AR: 1 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 15 -- MPC: 6 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+
+  Stack (size = 3): [1 | 2147483647, 0]
+
+  Return stack (size = 0): []
+
+  PC: 15 AR: 1 BR: 0
+
+  MEMORY READ VALUE: AR: 1 ---> Data(value=1)
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 15 --> LIT 2
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 16 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 3): [1 | 2147483647, 0]
+
+  Return stack (size = 0): []
+
+  PC: 15 AR: 15 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 17 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 3): [1 | 2147483647, 0]
+
+  Return stack (size = 0): []
+
+  PC: 15 AR: 15 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 18 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 4): [1 | 1, 2147483647, 0]
+
+  Return stack (size = 0): []
+
+  PC: 15 AR: 15 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 19 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+
+  Stack (size = 4): [2 | 1, 2147483647, 0]
+
+  Return stack (size = 0): []
+
+  PC: 16 AR: 15 BR: 0
+
+  MEMORY READ VALUE: AR: 15 ---> OperandInstruction(opcode=LIT, operand=2)
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 16 --> LOAD
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 20 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 4): [2 | 1, 2147483647, 0]
+
+  Return stack (size = 0): []
+
+  PC: 16 AR: 16 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 21 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 4): [2 | 1, 2147483647, 0]
+
+  Return stack (size = 0): []
+
+  PC: 16 AR: 16 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 22 -- MPC: 5 / MicroInstruction: LatchAR, ARSelectTOS, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 4): [2 | 1, 2147483647, 0]
+
+  Return stack (size = 0): []
+
+  PC: 16 AR: 2 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 23 -- MPC: 6 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+
+  Stack (size = 4): [2 | 1, 2147483647, 0]
+
+  Return stack (size = 0): []
+
+  PC: 17 AR: 2 BR: 0
+
+  MEMORY READ VALUE: AR: 2 ---> Data(value=2)
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 17 --> LIT 3
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 24 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 4): [2 | 1, 2147483647, 0]
+
+  Return stack (size = 0): []
+
+  PC: 17 AR: 17 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 25 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 4): [2 | 1, 2147483647, 0]
+
+  Return stack (size = 0): []
+
+  PC: 17 AR: 17 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 26 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 5): [2 | 2, 1, 2147483647]
+
+  Return stack (size = 0): []
+
+  PC: 17 AR: 17 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 27 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+
+  Stack (size = 5): [3 | 2, 1, 2147483647]
+
+  Return stack (size = 0): []
+
+  PC: 18 AR: 17 BR: 0
+
+  MEMORY READ VALUE: AR: 17 ---> OperandInstruction(opcode=LIT, operand=3)
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 18 --> LOAD
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 28 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 5): [3 | 2, 1, 2147483647]
+
+  Return stack (size = 0): []
+
+  PC: 18 AR: 18 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 29 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 5): [3 | 2, 1, 2147483647]
+
+  Return stack (size = 0): []
+
+  PC: 18 AR: 18 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 30 -- MPC: 5 / MicroInstruction: LatchAR, ARSelectTOS, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 5): [3 | 2, 1, 2147483647]
+
+  Return stack (size = 0): []
+
+  PC: 18 AR: 3 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 31 -- MPC: 6 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+
+  Stack (size = 5): [1 | 2, 1, 2147483647]
+
+  Return stack (size = 0): []
+
+  PC: 19 AR: 3 BR: 0
+
+  MEMORY READ VALUE: AR: 3 ---> Data(value=1)
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 19 --> LIT 112
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 32 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 5): [1 | 2, 1, 2147483647]
+
+  Return stack (size = 0): []
+
+  PC: 19 AR: 19 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 33 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 5): [1 | 2, 1, 2147483647]
+
+  Return stack (size = 0): []
+
+  PC: 19 AR: 19 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 34 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 6): [1 | 1, 2, 1]
+
+  Return stack (size = 0): []
+
+  PC: 19 AR: 19 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 35 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+
+  Stack (size = 6): [112 | 1, 2, 1]
+
+  Return stack (size = 0): []
+
+  PC: 20 AR: 19 BR: 0
+
+  MEMORY READ VALUE: AR: 19 ---> OperandInstruction(opcode=LIT, operand=112)
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 20 --> CALL
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 36 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 6): [112 | 1, 2, 1]
+
+  Return stack (size = 0): []
+
+  PC: 20 AR: 20 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 37 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 6): [112 | 1, 2, 1]
+
+  Return stack (size = 0): []
+
+  PC: 20 AR: 20 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 38 -- MPC: 55 / MicroInstruction: ReturnStackPush, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 6): [112 | 1, 2, 1]
+
+  Return stack (size = 1): [21]
+
+  PC: 20 AR: 20 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 39 -- MPC: 56 / MicroInstruction: LatchPC, PCJumpTypeTOS, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 6): [112 | 1, 2, 1]
+
+  Return stack (size = 1): [21]
+
+  PC: 112 AR: 20 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 40 -- MPC: 57 / MicroInstruction: LatchTOS, TOSSelectDS, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 6): [1 | 1, 2, 1]
+
+  Return stack (size = 1): [21]
+
+  PC: 112 AR: 20 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 41 -- MPC: 58 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterZero 
+
+  Stack (size = 5): [1 | 2, 1, 2147483647]
+
+  Return stack (size = 1): [21]
+
+  PC: 112 AR: 20 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 112 --> LIT 10
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 42 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 5): [1 | 2, 1, 2147483647]
+
+  Return stack (size = 1): [21]
+
+  PC: 112 AR: 112 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 43 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 5): [1 | 2, 1, 2147483647]
+
+  Return stack (size = 1): [21]
+
+  PC: 112 AR: 112 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 44 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 6): [1 | 1, 2, 1]
+
+  Return stack (size = 1): [21]
+
+  PC: 112 AR: 112 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 45 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+
+  Stack (size = 6): [10 | 1, 2, 1]
+
+  Return stack (size = 1): [21]
+
+  PC: 113 AR: 112 BR: 0
+
+  MEMORY READ VALUE: AR: 112 ---> OperandInstruction(opcode=LIT, operand=10)
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 113 --> STORE
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 46 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 6): [10 | 1, 2, 1]
+
+  Return stack (size = 1): [21]
+
+  PC: 113 AR: 113 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 47 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 6): [10 | 1, 2, 1]
+
+  Return stack (size = 1): [21]
+
+  PC: 113 AR: 113 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 48 -- MPC: 7 / MicroInstruction: LatchAR, ARSelectTOS, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 6): [10 | 1, 2, 1]
+
+  Return stack (size = 1): [21]
+
+  PC: 113 AR: 10 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.DataPath - MEMORY WRITTEN VALUE: AR: 10 <--- 1
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 49 -- MPC: 8 / MicroInstruction: MemoryWrite, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 6): [10 | 1, 2, 1]
+
+  Return stack (size = 1): [21]
+
+  PC: 113 AR: 10 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 50 -- MPC: 9 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 5): [10 | 2, 1, 2147483647]
+
+  Return stack (size = 1): [21]
+
+  PC: 113 AR: 10 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 51 -- MPC: 10 / MicroInstruction: LatchTOS, TOSSelectDS, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 5): [2 | 2, 1, 2147483647]
+
+  Return stack (size = 1): [21]
+
+  PC: 113 AR: 10 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 52 -- MPC: 11 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+
+  Stack (size = 4): [2 | 1, 2147483647, 0]
+
+  Return stack (size = 1): [21]
+
+  PC: 114 AR: 10 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 114 --> LIT 9
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 53 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 4): [2 | 1, 2147483647, 0]
+
+  Return stack (size = 1): [21]
+
+  PC: 114 AR: 114 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 54 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 4): [2 | 1, 2147483647, 0]
+
+  Return stack (size = 1): [21]
+
+  PC: 114 AR: 114 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 55 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 5): [2 | 2, 1, 2147483647]
+
+  Return stack (size = 1): [21]
+
+  PC: 114 AR: 114 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 56 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+
+  Stack (size = 5): [9 | 2, 1, 2147483647]
+
+  Return stack (size = 1): [21]
+
+  PC: 115 AR: 114 BR: 0
+
+  MEMORY READ VALUE: AR: 114 ---> OperandInstruction(opcode=LIT, operand=9)
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 115 --> STORE
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 57 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 5): [9 | 2, 1, 2147483647]
+
+  Return stack (size = 1): [21]
+
+  PC: 115 AR: 115 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 58 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 5): [9 | 2, 1, 2147483647]
+
+  Return stack (size = 1): [21]
+
+  PC: 115 AR: 115 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 59 -- MPC: 7 / MicroInstruction: LatchAR, ARSelectTOS, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 5): [9 | 2, 1, 2147483647]
+
+  Return stack (size = 1): [21]
+
+  PC: 115 AR: 9 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.DataPath - MEMORY WRITTEN VALUE: AR: 9 <--- 2
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 60 -- MPC: 8 / MicroInstruction: MemoryWrite, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 5): [9 | 2, 1, 2147483647]
+
+  Return stack (size = 1): [21]
+
+  PC: 115 AR: 9 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 61 -- MPC: 9 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 4): [9 | 1, 2147483647, 0]
+
+  Return stack (size = 1): [21]
+
+  PC: 115 AR: 9 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 62 -- MPC: 10 / MicroInstruction: LatchTOS, TOSSelectDS, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 4): [1 | 1, 2147483647, 0]
+
+  Return stack (size = 1): [21]
+
+  PC: 115 AR: 9 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 63 -- MPC: 11 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+
+  Stack (size = 3): [1 | 2147483647, 0]
+
+  Return stack (size = 1): [21]
+
+  PC: 116 AR: 9 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 116 --> LIT 8
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 64 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 3): [1 | 2147483647, 0]
+
+  Return stack (size = 1): [21]
+
+  PC: 116 AR: 116 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 65 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 3): [1 | 2147483647, 0]
+
+  Return stack (size = 1): [21]
+
+  PC: 116 AR: 116 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 66 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 4): [1 | 1, 2147483647, 0]
+
+  Return stack (size = 1): [21]
+
+  PC: 116 AR: 116 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 67 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+
+  Stack (size = 4): [8 | 1, 2147483647, 0]
+
+  Return stack (size = 1): [21]
+
+  PC: 117 AR: 116 BR: 0
+
+  MEMORY READ VALUE: AR: 116 ---> OperandInstruction(opcode=LIT, operand=8)
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 117 --> STORE
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 68 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 4): [8 | 1, 2147483647, 0]
+
+  Return stack (size = 1): [21]
+
+  PC: 117 AR: 117 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 69 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 4): [8 | 1, 2147483647, 0]
+
+  Return stack (size = 1): [21]
+
+  PC: 117 AR: 117 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 70 -- MPC: 7 / MicroInstruction: LatchAR, ARSelectTOS, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 4): [8 | 1, 2147483647, 0]
+
+  Return stack (size = 1): [21]
+
+  PC: 117 AR: 8 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.DataPath - MEMORY WRITTEN VALUE: AR: 8 <--- 1
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 71 -- MPC: 8 / MicroInstruction: MemoryWrite, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 4): [8 | 1, 2147483647, 0]
+
+  Return stack (size = 1): [21]
+
+  PC: 117 AR: 8 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 72 -- MPC: 9 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 3): [8 | 2147483647, 0]
+
+  Return stack (size = 1): [21]
+
+  PC: 117 AR: 8 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 73 -- MPC: 10 / MicroInstruction: LatchTOS, TOSSelectDS, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 3): [2147483647 | 2147483647, 0]
+
+  Return stack (size = 1): [21]
+
+  PC: 117 AR: 8 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 74 -- MPC: 11 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+
+  Stack (size = 2): [2147483647 | 0]
+
+  Return stack (size = 1): [21]
+
+  PC: 118 AR: 8 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 118 --> LIT 7
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 75 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 2): [2147483647 | 0]
+
+  Return stack (size = 1): [21]
+
+  PC: 118 AR: 118 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 76 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+
+  Stack (size = 2): [2147483647 | 0]
+
+  Return stack (size = 1): [21]
+
+  PC: 118 AR: 118 BR: 0
+
+
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 77 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 3): [2147483647 | 2147483647, 0]
+
+  Return stack (size = 1): [21]
+
+  PC: 118 AR: 118 BR: 0
+
+
+...
