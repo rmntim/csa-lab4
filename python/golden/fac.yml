@@ -31,24 +31,24 @@ in_stdin: |
 out_stdout: |
 memory: |-
   0 - 00000000 - data 0
-  1 - 0000000F - dup
+  1 - 0000000f - dup
   2 - 00000004 00000001 - lit 1
   3 - 00000008 - sub
-  4 - 00000004 0000000C - lit 12
+  4 - 00000004 0000000c - lit 12
   5 - 00000010 - swap
   6 - 00000015 - jz
-  7 - 0000000F - dup
-  8 - 0000000D - dec
+  7 - 0000000f - dup
+  8 - 0000000d - dec
   9 - 00000004 00000001 - lit 1
   10 - 00000018 - call
   11 - 00000009 - mul
   12 - 00000019 - ret
-  13 - 00000004 0000000B - lit 11
+  13 - 00000004 0000000b - lit 11
   14 - 00000004 00000001 - lit 1
   15 - 00000018 - call
   16 - 00000004 00000000 - lit 0
   17 - 00000006 - store
-  18 - 0000001C - halt
+  18 - 0000001c - halt
 out_log: |+
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 13 --> LIT 11
 
