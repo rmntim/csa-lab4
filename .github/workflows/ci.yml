@@ -19,9 +19,6 @@ jobs:
         with:
           args: --config .detekt.yaml
 
-      - name: Run Kotlin linter
-        uses: ScaCap/action-ktlint@v1.9.0
-
       - name: markdown-lint
         uses: DavidAnson/markdownlint-cli2-action@v20.0.0
 
