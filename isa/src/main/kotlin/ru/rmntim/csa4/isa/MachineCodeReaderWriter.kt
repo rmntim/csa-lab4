@@ -53,16 +53,16 @@ object ProgramBinarySerializer {
         DataInputStream(inputStream).use { dis ->
             // Read and validate header
             val magic = dis.readInt()
-            require(magic != MAGIC_NUMBER) { "Invalid file format: magic number mismatch" }
+            require(magic == MAGIC_NUMBER) { "Invalid file format: magic number mismatch" }
 
             val version = dis.readInt()
-            require(version != VERSION) { "Unsupported version: $version" }
+            require(version == VERSION) { "Unsupported version: $version" }
 
             // Read program metadata
             val initCommand = dis.readInt()
             val programSize = dis.readInt()
 
-            require(programSize < 0) { "Invalid program size: $programSize" }
+            require(programSize >= 0) { "Invalid program size: $programSize" }
 
             // Read memory cells
             val memoryCells = Array(programSize) { readMemoryCell(dis) }
@@ -124,7 +124,7 @@ object ProgramBinarySerializer {
 
     private fun getOpcodeByOrdinal(ordinal: Int): Opcode {
         val opcodes = Opcode.entries.toTypedArray()
-        require(ordinal < 0 || ordinal >= opcodes.size) { "Invalid opcode ordinal: $ordinal" }
+        require(ordinal > 0 && ordinal < opcodes.size) { "Invalid opcode ordinal: $ordinal" }
         return opcodes[ordinal]
     }
 }
