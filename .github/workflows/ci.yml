@@ -49,6 +49,7 @@ jobs:
           cd python
           poetry install
 
+      # prob1 is removed from testing due to enormously long runtime
       - name: Run tests and collect coverage
         run: |
           cd python
