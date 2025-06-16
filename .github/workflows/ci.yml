@@ -19,6 +19,8 @@ jobs:
 
       - name: Run Kotlin linter
         uses: vroy/gha-kotlin-linter@v4
+        with:
+          args: --config .detekt.yaml
 
       - name: markdown-lint
         uses: articulate/actions-markdownlint@v1.1.0

@@ -134,7 +134,7 @@ private val INSTRUCTION_REGISTRY =
 /**
  * Validates if a string is a valid label name according to EBNF grammar
  */
-@Suppress("ReturnCount") // It's small, so we can do it
+
 private fun isValidLabel(name: String): Boolean {
     if (name.isEmpty()) return false
     if (!name[0].isLetter()) return false
@@ -194,7 +194,6 @@ class AssemblyLexer {
         return tokens
     }
 
-    @Suppress("ReturnCount") // It's readable
     private fun tokenizeLine(
         line: String,
         lineNumber: Int,
@@ -224,7 +223,6 @@ class AssemblyLexer {
         return parseInstruction(meaningfulPart, lineNumber)
     }
 
-    @Suppress("ThrowsCount") // Can't be improved
     private fun parseInstruction(
         instruction: String,
         lineNumber: Int,
@@ -263,7 +261,6 @@ class AssemblyLexer {
         return Token.Instruction(config.opcode, operand, lineNumber)
     }
 
-    @Suppress("ReturnCount", "ThrowsCount") // We need separate returns for different tokens
     private fun parseDirective(
         directive: String,
         lineNumber: Int,
@@ -351,7 +348,7 @@ data class MemorySegment(
 class MacroPreprocessor {
     private val macros = mutableMapOf<String, MacroDefinition>()
 
-    @Suppress("NestedBlockDepth", "ThrowsCount") // Nesting is justified
+    @Suppress("NestedBlockDepth") // Nesting is justified
     fun preprocess(tokens: List<Token>): List<Token> {
         val processedTokens = mutableListOf<Token>()
         var i = 0
@@ -573,7 +570,7 @@ class AssemblyParser {
     /**
      * Validates that instructions are placed in appropriate sections
      */
-    @Suppress("ThrowsCount") // It's validation, of course it needs a lot of throws
+
     private fun validateInstructionPlacement(
         instruction: Token.Instruction,
         currentSection: Section,

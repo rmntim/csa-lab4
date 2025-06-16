@@ -7,10 +7,17 @@ import kotlin.collections.ArrayDeque
 
 enum class Signal {
     // Stack operations
-    DataStackPush, DataStackPop, ReturnStackPush, ReturnStackPop,
+    DataStackPush,
+    DataStackPop,
+    ReturnStackPush,
+    ReturnStackPop,
 
     // Register operations
-    LatchAR, LatchBR, LatchTOS, LatchPC, LatchMPCounter,
+    LatchAR,
+    LatchBR,
+    LatchTOS,
+    LatchPC,
+    LatchMPCounter,
 
     // Multiplexers latch
     PCJumpTypeJZ,
@@ -32,10 +39,20 @@ enum class Signal {
     ALULeftOPDataStack,
 
     // I/O, Memory
-    MemoryWrite, Output,
+    MemoryWrite,
+    Output,
 
     // ALU operations
-    ALUSum, ALUSub, ALUMul, ALUDiv, ALUMod, ALUAnd, ALUOr, ALUXor, ALUPlus1, ALUMinus1,
+    ALUSum,
+    ALUSub,
+    ALUMul,
+    ALUDiv,
+    ALUMod,
+    ALUAnd,
+    ALUOr,
+    ALUXor,
+    ALUPlus1,
+    ALUMinus1,
 }
 
 // there are 11 functions, limit - 10
@@ -44,7 +61,7 @@ enum class Signal {
 class ControlUnit(
     initPc: Int,
     private val dataPath: DataPath,
-    returnStackSize: Int
+    returnStackSize: Int,
 ) {
     companion object {
         private const val DEBUG_STACK_OVERVIEW = 3
@@ -252,35 +269,36 @@ class ControlUnit(
     // suppress it because numbers matches with the microprogram above
     // also it's forced to be cyclomatic complex, but it's still easy to read
     @Suppress("MagicNumber", "CyclomaticComplexMethod")
-    private fun opcodeToMpc(opcode: Opcode): Int = when (opcode) {
-        Opcode.NOP -> 2
-        Opcode.LIT -> 3
-        Opcode.LOAD -> 5
-        Opcode.STORE -> 7
-        Opcode.ADD -> 12
-        Opcode.SUB -> 14
-        Opcode.MUL -> 16
-        Opcode.DIV -> 18
-        Opcode.MOD -> 20
-        Opcode.INC -> 22
-        Opcode.DEC -> 23
-        Opcode.DROP -> 24
-        Opcode.DUP -> 26
-        Opcode.SWAP -> 27
-        Opcode.OVER -> 31
-        Opcode.OR -> 38
-        Opcode.AND -> 40
-        Opcode.XOR -> 42
-        Opcode.JZ -> 44
-        Opcode.JN -> 48
-        Opcode.JUMP -> 52
-        Opcode.CALL -> 55
-        Opcode.RET -> 59
-        Opcode.IN -> 61
-        Opcode.OUT -> 62
-        Opcode.HALT -> throw HaltedException()
-        else -> throw UnknownOpcodeException() // WORD, etc..
-    }
+    private fun opcodeToMpc(opcode: Opcode): Int =
+        when (opcode) {
+            Opcode.NOP -> 2
+            Opcode.LIT -> 3
+            Opcode.LOAD -> 5
+            Opcode.STORE -> 7
+            Opcode.ADD -> 12
+            Opcode.SUB -> 14
+            Opcode.MUL -> 16
+            Opcode.DIV -> 18
+            Opcode.MOD -> 20
+            Opcode.INC -> 22
+            Opcode.DEC -> 23
+            Opcode.DROP -> 24
+            Opcode.DUP -> 26
+            Opcode.SWAP -> 27
+            Opcode.OVER -> 31
+            Opcode.OR -> 38
+            Opcode.AND -> 40
+            Opcode.XOR -> 42
+            Opcode.JZ -> 44
+            Opcode.JN -> 48
+            Opcode.JUMP -> 52
+            Opcode.CALL -> 55
+            Opcode.RET -> 59
+            Opcode.IN -> 61
+            Opcode.OUT -> 62
+            Opcode.HALT -> throw HaltedException()
+            else -> throw UnknownOpcodeException() // WORD, etc..
+        }
 
     private fun dispatchMicroInstruction(microcode: Array<Signal>) {
         for (signal in microcode) {
@@ -314,24 +332,30 @@ class ControlUnit(
                 .reversed().joinToString(", ")
             }]\n" +
             "PC: $pc AR: ${dataPath.ar} BR: ${dataPath.br}" +
-            if (Signal.TOSSelectMemory in mProgram[prevMpc]) "\n${dataPath.generateMemoryReadLog()}\n"
-            else "\n"
+            if (Signal.TOSSelectMemory in mProgram[prevMpc]) {
+                "\n${dataPath.generateMemoryReadLog()}\n"
+            } else {
+                "\n"
+            }
 
-    private fun generateInstrLogString(): String = when (val currentInstr = dataPath.memory[pc]) {
-        is MemoryCell.Instruction ->
-            "NOW EXECUTING INSTRUCTION PC: $pc --> ${currentInstr.opcode}"
-        is MemoryCell.OperandInstruction ->
-            "NOW EXECUTING INSTRUCTION PC: $pc --> ${currentInstr.opcode} ${currentInstr.operand}"
-        is MemoryCell.Data ->
-            "NOW EXECUTING DATA INSTRUCTION PC: $pc --> value: ${currentInstr.value}. WATCH OUT!!!"
-    }
-
-    private fun generateMemoryDump(): String = "Memory Dump:\n" +
-        dataPath.memory.mapIndexed { index, memoryCell ->
-            "$index: $memoryCell"
-        }.reduce { a, b ->
-            "$a\n$b"
+    private fun generateInstrLogString(): String =
+        when (val currentInstr = dataPath.memory[pc]) {
+            is MemoryCell.Instruction ->
+                "NOW EXECUTING INSTRUCTION PC: $pc --> ${currentInstr.opcode}"
+            is MemoryCell.OperandInstruction ->
+                "NOW EXECUTING INSTRUCTION PC: $pc --> ${currentInstr.opcode} ${currentInstr.operand}"
+            is MemoryCell.Data ->
+                "NOW EXECUTING DATA INSTRUCTION PC: $pc --> value: ${currentInstr.value}. WATCH OUT!!!"
         }
+
+    private fun generateMemoryDump(): String =
+        "Memory Dump:\n" +
+            dataPath.memory
+                .mapIndexed { index, memoryCell ->
+                    "$index: $memoryCell"
+                }.reduce { a, b ->
+                    "$a\n$b"
+                }
 
     fun simulate() {
         try {
@@ -356,11 +380,17 @@ class ControlUnit(
         } else if (Signal.PCJumpTypeTOS in microcode) {
             pc = dataPath.tos
         } else if (Signal.PCJumpTypeJZ in microcode) {
-            if (dataPath.tos == 0) pc = dataPath.dataStack.last()
-            else pc++
+            if (dataPath.tos == 0) {
+                pc = dataPath.dataStack.last()
+            } else {
+                pc++
+            }
         } else if (Signal.PCJumpTypeJN in microcode) {
-            if (dataPath.tos < 0) pc = dataPath.dataStack.last()
-            else pc++
+            if (dataPath.tos < 0) {
+                pc = dataPath.dataStack.last()
+            } else {
+                pc++
+            }
         } else if (Signal.PCJumpTypeRET in microcode) {
             pc = returnStack.last()
         }
@@ -381,13 +411,14 @@ class ControlUnit(
             mPc = 0
         } else if (Signal.MicroProgramCounterOpcode in microcode) {
             val memoryCell = dataPath.memory[dataPath.ar]
-            mPc = opcodeToMpc(
-                when (memoryCell) {
-                    is MemoryCell.Instruction -> memoryCell.opcode
-                    is MemoryCell.OperandInstruction -> memoryCell.opcode
-                    else -> Opcode.WORD
-                }
-            )
+            mPc =
+                opcodeToMpc(
+                    when (memoryCell) {
+                        is MemoryCell.Instruction -> memoryCell.opcode
+                        is MemoryCell.OperandInstruction -> memoryCell.opcode
+                        else -> Opcode.WORD
+                    },
+                )
         }
     }
 }

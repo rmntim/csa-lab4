@@ -3,7 +3,10 @@ package ru.rmntim.csa4.isa
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Program(val initCommand: Int, val program: Array<MemoryCell>) {
+data class Program(
+    val initCommand: Int,
+    val program: Array<MemoryCell>,
+) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Program) return false
