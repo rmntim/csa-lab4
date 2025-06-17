@@ -178,1002 +178,1140 @@ in_stdin: |
 out_stdout: |-
   906609
 out_log: |
-  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 1 --> LIT 993
-
-  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
-
-  TICK 0 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
-
-  Stack (size = 1): [0 | ]
-
-  Return stack (size = 0): []
-
-  PC: 1 AR: 1 BR: 0
-
-
-
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 1 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+  TICK 531810150 -- MPC: 45 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 1): [0 | ]
+  Stack (size = 6): [138 | 138, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 1 AR: 1 BR: 0
+  PC: 66 AR: 65 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 2 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810151 -- MPC: 46 / MicroInstruction: LatchTOS, TOSSelectDS, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 2): [0 | 0]
+  Stack (size = 6): [138 | 138, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 1 AR: 1 BR: 0
+  PC: 66 AR: 65 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
-
-  TICK 3 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
 
-  Stack (size = 2): [993 | 0]
+  TICK 531810152 -- MPC: 47 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterZero 
 
-  Return stack (size = 0): []
+  Stack (size = 5): [138 | 13800, 138, 100]
 
-  PC: 2 AR: 1 BR: 0
+  Return stack (size = 1): [24]
 
-  MEMORY READ VALUE: AR: 1 ---> OperandInstruction(opcode=LIT, operand=993)
+  PC: 66 AR: 65 BR: 138
 
 
 
-  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 2 --> DUP
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 66 --> DUP
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 4 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810153 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 2): [993 | 0]
+  Stack (size = 5): [138 | 13800, 138, 100]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 2 AR: 2 BR: 0
+  PC: 66 AR: 66 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 5 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+  TICK 531810154 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
 
-  Stack (size = 2): [993 | 0]
+  Stack (size = 5): [138 | 13800, 138, 100]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 2 AR: 2 BR: 0
+  PC: 66 AR: 66 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 6 -- MPC: 26 / MicroInstruction: DataStackPush, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+  TICK 531810155 -- MPC: 26 / MicroInstruction: DataStackPush, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
 
-  Stack (size = 3): [993 | 993, 0]
+  Stack (size = 6): [138 | 138, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 3 AR: 2 BR: 0
+  PC: 67 AR: 66 BR: 138
 
 
 
-  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 3 --> LIT 100
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 67 --> LIT 10
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 7 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810156 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 3): [993 | 993, 0]
+  Stack (size = 6): [138 | 138, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 3 AR: 3 BR: 0
+  PC: 67 AR: 67 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 8 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+  TICK 531810157 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
 
-  Stack (size = 3): [993 | 993, 0]
+  Stack (size = 6): [138 | 138, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 3 AR: 3 BR: 0
+  PC: 67 AR: 67 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 9 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810158 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 4): [993 | 993, 993, 0]
+  Stack (size = 7): [138 | 138, 138, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 3 AR: 3 BR: 0
+  PC: 67 AR: 67 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 10 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+  TICK 531810159 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
 
-  Stack (size = 4): [100 | 993, 993, 0]
+  Stack (size = 7): [10 | 138, 138, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 4 AR: 3 BR: 0
+  PC: 68 AR: 67 BR: 138
 
-  MEMORY READ VALUE: AR: 3 ---> OperandInstruction(opcode=LIT, operand=100)
+  MEMORY READ VALUE: AR: 67 ---> OperandInstruction(opcode=LIT, operand=10)
 
 
 
-  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 4 --> SUB
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 68 --> MOD
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 11 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810160 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 4): [100 | 993, 993, 0]
+  Stack (size = 7): [10 | 138, 138, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 4 AR: 4 BR: 0
+  PC: 68 AR: 68 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 12 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+  TICK 531810161 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
 
-  Stack (size = 4): [100 | 993, 993, 0]
+  Stack (size = 7): [10 | 138, 138, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 4 AR: 4 BR: 0
+  PC: 68 AR: 68 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 13 -- MPC: 14 / MicroInstruction: ALUSub, ALULeftOPDataStack, TOSSelectALU, LatchTOS, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810162 -- MPC: 20 / MicroInstruction: ALUMod, ALULeftOPDataStack, TOSSelectALU, LatchTOS, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 4): [893 | 993, 993, 0]
+  Stack (size = 7): [8 | 138, 138, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 4 AR: 4 BR: 0
+  PC: 68 AR: 68 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 14 -- MPC: 15 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+  TICK 531810163 -- MPC: 21 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
 
-  Stack (size = 3): [893 | 993, 0]
+  Stack (size = 6): [8 | 138, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 5 AR: 4 BR: 0
+  PC: 69 AR: 68 BR: 138
 
 
 
-  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 5 --> LIT 34
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 69 --> LIT 55
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 15 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810164 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 3): [893 | 993, 0]
+  Stack (size = 6): [8 | 138, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 5 AR: 5 BR: 0
+  PC: 69 AR: 69 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 16 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+  TICK 531810165 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
 
-  Stack (size = 3): [893 | 993, 0]
+  Stack (size = 6): [8 | 138, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 5 AR: 5 BR: 0
+  PC: 69 AR: 69 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 17 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810166 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 4): [893 | 893, 993, 0]
+  Stack (size = 7): [8 | 8, 138, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 5 AR: 5 BR: 0
+  PC: 69 AR: 69 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 18 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+  TICK 531810167 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
 
-  Stack (size = 4): [34 | 893, 993, 0]
+  Stack (size = 7): [55 | 8, 138, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 6 AR: 5 BR: 0
+  PC: 70 AR: 69 BR: 138
 
-  MEMORY READ VALUE: AR: 5 ---> OperandInstruction(opcode=LIT, operand=34)
+  MEMORY READ VALUE: AR: 69 ---> OperandInstruction(opcode=LIT, operand=55)
 
 
 
-  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 6 --> SWAP
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 70 --> LOAD
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 19 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810168 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 4): [34 | 893, 993, 0]
+  Stack (size = 7): [55 | 8, 138, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 6 AR: 6 BR: 0
+  PC: 70 AR: 70 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 20 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+  TICK 531810169 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
 
-  Stack (size = 4): [34 | 893, 993, 0]
+  Stack (size = 7): [55 | 8, 138, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 6 AR: 6 BR: 0
+  PC: 70 AR: 70 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 21 -- MPC: 27 / MicroInstruction: LatchBR, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810170 -- MPC: 5 / MicroInstruction: LatchAR, ARSelectTOS, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 4): [34 | 893, 993, 0]
+  Stack (size = 7): [55 | 8, 138, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 6 AR: 6 BR: 893
+  PC: 70 AR: 55 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 531810171 -- MPC: 6 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+
+  Stack (size = 7): [0 | 8, 138, 13800]
 
-  TICK 22 -- MPC: 28 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterNext 
+  Return stack (size = 1): [24]
 
-  Stack (size = 3): [34 | 993, 0]
+  PC: 71 AR: 55 BR: 138
 
-  Return stack (size = 0): []
+  MEMORY READ VALUE: AR: 55 ---> Data(value=0)
 
-  PC: 6 AR: 6 BR: 893
 
 
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 71 --> LIT 10
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 23 -- MPC: 29 / MicroInstruction: DataStackPush, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810172 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 4): [34 | 34, 993, 0]
+  Stack (size = 7): [0 | 8, 138, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 6 AR: 6 BR: 893
+  PC: 71 AR: 71 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 24 -- MPC: 30 / MicroInstruction: LatchTOS, TOSSelectBR, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+  TICK 531810173 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
 
-  Stack (size = 4): [893 | 34, 993, 0]
+  Stack (size = 7): [0 | 8, 138, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 7 AR: 6 BR: 893
+  PC: 71 AR: 71 BR: 138
 
 
 
-  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 7 --> JN
-
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 25 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810174 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 4): [893 | 34, 993, 0]
+  Stack (size = 8): [0 | 0, 8, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 7 AR: 7 BR: 893
+  PC: 71 AR: 71 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 531810175 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
 
-  TICK 26 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+  Stack (size = 8): [10 | 0, 8, 138]
 
-  Stack (size = 4): [893 | 34, 993, 0]
+  Return stack (size = 1): [24]
 
-  Return stack (size = 0): []
+  PC: 72 AR: 71 BR: 138
 
-  PC: 7 AR: 7 BR: 893
+  MEMORY READ VALUE: AR: 71 ---> OperandInstruction(opcode=LIT, operand=10)
 
 
 
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 72 --> MUL
+
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 27 -- MPC: 48 / MicroInstruction: LatchPC, PCJumpTypeJN, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810176 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 4): [893 | 34, 993, 0]
+  Stack (size = 8): [10 | 0, 8, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 8 AR: 7 BR: 893
+  PC: 72 AR: 72 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 28 -- MPC: 49 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810177 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
 
-  Stack (size = 3): [893 | 993, 0]
+  Stack (size = 8): [10 | 0, 8, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 8 AR: 7 BR: 893
+  PC: 72 AR: 72 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 29 -- MPC: 50 / MicroInstruction: LatchTOS, TOSSelectDS, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810178 -- MPC: 16 / MicroInstruction: ALUMul, ALULeftOPDataStack, TOSSelectALU, LatchTOS, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 3): [993 | 993, 0]
+  Stack (size = 8): [0 | 0, 8, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 8 AR: 7 BR: 893
+  PC: 72 AR: 72 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 30 -- MPC: 51 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterZero 
+  TICK 531810179 -- MPC: 17 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
 
-  Stack (size = 2): [993 | 0]
+  Stack (size = 7): [0 | 8, 138, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 8 AR: 7 BR: 893
+  PC: 73 AR: 72 BR: 138
 
 
 
-  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 8 --> LIT 913
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 73 --> ADD
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 31 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810180 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 2): [993 | 0]
+  Stack (size = 7): [0 | 8, 138, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 8 AR: 8 BR: 893
+  PC: 73 AR: 73 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 32 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+  TICK 531810181 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
 
-  Stack (size = 2): [993 | 0]
+  Stack (size = 7): [0 | 8, 138, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 8 AR: 8 BR: 893
+  PC: 73 AR: 73 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 33 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810182 -- MPC: 12 / MicroInstruction: ALUSum, ALULeftOPDataStack, TOSSelectALU, LatchTOS, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 3): [993 | 993, 0]
+  Stack (size = 7): [8 | 8, 138, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 8 AR: 8 BR: 893
+  PC: 73 AR: 73 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 34 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+  TICK 531810183 -- MPC: 13 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
 
-  Stack (size = 3): [913 | 993, 0]
+  Stack (size = 6): [8 | 138, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 9 AR: 8 BR: 893
+  PC: 74 AR: 73 BR: 138
 
-  MEMORY READ VALUE: AR: 8 ---> OperandInstruction(opcode=LIT, operand=913)
 
 
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 74 --> LIT 55
 
-  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 9 --> DUP
-
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 35 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810184 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 3): [913 | 993, 0]
+  Stack (size = 6): [8 | 138, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 9 AR: 9 BR: 893
+  PC: 74 AR: 74 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 36 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+  TICK 531810185 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
 
-  Stack (size = 3): [913 | 993, 0]
+  Stack (size = 6): [8 | 138, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 9 AR: 9 BR: 893
+  PC: 74 AR: 74 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
-
-  TICK 37 -- MPC: 26 / MicroInstruction: DataStackPush, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
 
-  Stack (size = 4): [913 | 913, 993, 0]
+  TICK 531810186 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Return stack (size = 0): []
+  Stack (size = 7): [8 | 8, 138, 13800]
 
-  PC: 10 AR: 9 BR: 893
+  Return stack (size = 1): [24]
 
+  PC: 74 AR: 74 BR: 138
 
 
-  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 10 --> LIT 100
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 38 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810187 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
 
-  Stack (size = 4): [913 | 913, 993, 0]
+  Stack (size = 7): [55 | 8, 138, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 10 AR: 10 BR: 893
+  PC: 75 AR: 74 BR: 138
 
+  MEMORY READ VALUE: AR: 74 ---> OperandInstruction(opcode=LIT, operand=55)
 
 
+
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 75 --> STORE
+
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 39 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+  TICK 531810188 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 4): [913 | 913, 993, 0]
+  Stack (size = 7): [55 | 8, 138, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 10 AR: 10 BR: 893
+  PC: 75 AR: 75 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 40 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810189 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
 
-  Stack (size = 5): [913 | 913, 913, 993]
+  Stack (size = 7): [55 | 8, 138, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 10 AR: 10 BR: 893
+  PC: 75 AR: 75 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 41 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+  TICK 531810190 -- MPC: 7 / MicroInstruction: LatchAR, ARSelectTOS, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 5): [100 | 913, 913, 993]
+  Stack (size = 7): [55 | 8, 138, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 11 AR: 10 BR: 893
+  PC: 75 AR: 55 BR: 138
 
-  MEMORY READ VALUE: AR: 10 ---> OperandInstruction(opcode=LIT, operand=100)
 
 
+  [INFO]: ru.rmntim.csa4.comp.DataPath - MEMORY WRITTEN VALUE: AR: 55 <--- 8
 
-  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 11 --> SUB
-
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 42 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810191 -- MPC: 8 / MicroInstruction: MemoryWrite, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 5): [100 | 913, 913, 993]
+  Stack (size = 7): [55 | 8, 138, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 11 AR: 11 BR: 893
+  PC: 75 AR: 55 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 43 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+  TICK 531810192 -- MPC: 9 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 5): [100 | 913, 913, 993]
+  Stack (size = 6): [55 | 138, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 11 AR: 11 BR: 893
+  PC: 75 AR: 55 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 44 -- MPC: 14 / MicroInstruction: ALUSub, ALULeftOPDataStack, TOSSelectALU, LatchTOS, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810193 -- MPC: 10 / MicroInstruction: LatchTOS, TOSSelectDS, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 5): [813 | 913, 913, 993]
+  Stack (size = 6): [138 | 138, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 11 AR: 11 BR: 893
+  PC: 75 AR: 55 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 45 -- MPC: 15 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+  TICK 531810194 -- MPC: 11 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
 
-  Stack (size = 4): [813 | 913, 993, 0]
+  Stack (size = 5): [138 | 13800, 138, 100]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 12 AR: 11 BR: 893
+  PC: 76 AR: 55 BR: 138
 
 
 
-  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 12 --> LIT 30
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 76 --> LIT 10
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 46 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810195 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 4): [813 | 913, 993, 0]
+  Stack (size = 5): [138 | 13800, 138, 100]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 12 AR: 12 BR: 893
+  PC: 76 AR: 76 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 47 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+  TICK 531810196 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
 
-  Stack (size = 4): [813 | 913, 993, 0]
+  Stack (size = 5): [138 | 13800, 138, 100]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 12 AR: 12 BR: 893
+  PC: 76 AR: 76 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 48 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810197 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 5): [813 | 813, 913, 993]
+  Stack (size = 6): [138 | 138, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 12 AR: 12 BR: 893
+  PC: 76 AR: 76 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 49 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+  TICK 531810198 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
 
-  Stack (size = 5): [30 | 813, 913, 993]
+  Stack (size = 6): [10 | 138, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 13 AR: 12 BR: 893
+  PC: 77 AR: 76 BR: 138
 
-  MEMORY READ VALUE: AR: 12 ---> OperandInstruction(opcode=LIT, operand=30)
+  MEMORY READ VALUE: AR: 76 ---> OperandInstruction(opcode=LIT, operand=10)
 
 
 
-  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 13 --> SWAP
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 77 --> DIV
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 50 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810199 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 5): [30 | 813, 913, 993]
+  Stack (size = 6): [10 | 138, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 13 AR: 13 BR: 893
+  PC: 77 AR: 77 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 51 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+  TICK 531810200 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
 
-  Stack (size = 5): [30 | 813, 913, 993]
+  Stack (size = 6): [10 | 138, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 13 AR: 13 BR: 893
+  PC: 77 AR: 77 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 52 -- MPC: 27 / MicroInstruction: LatchBR, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810201 -- MPC: 18 / MicroInstruction: ALUDiv, ALULeftOPDataStack, TOSSelectALU, LatchTOS, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 5): [30 | 813, 913, 993]
+  Stack (size = 6): [13 | 138, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 13 AR: 13 BR: 813
+  PC: 77 AR: 77 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 531810202 -- MPC: 19 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
 
-  TICK 53 -- MPC: 28 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterNext 
+  Stack (size = 5): [13 | 13800, 138, 100]
 
-  Stack (size = 4): [30 | 913, 993, 0]
+  Return stack (size = 1): [24]
 
-  Return stack (size = 0): []
+  PC: 78 AR: 77 BR: 138
 
-  PC: 13 AR: 13 BR: 813
 
 
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 78 --> LIT 62
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 54 -- MPC: 29 / MicroInstruction: DataStackPush, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810203 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 5): [30 | 30, 913, 993]
+  Stack (size = 5): [13 | 13800, 138, 100]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 13 AR: 13 BR: 813
+  PC: 78 AR: 78 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 55 -- MPC: 30 / MicroInstruction: LatchTOS, TOSSelectBR, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+  TICK 531810204 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
 
-  Stack (size = 5): [813 | 30, 913, 993]
+  Stack (size = 5): [13 | 13800, 138, 100]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 14 AR: 13 BR: 813
+  PC: 78 AR: 78 BR: 138
 
 
 
-  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 14 --> JN
-
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 56 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810205 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 5): [813 | 30, 913, 993]
+  Stack (size = 6): [13 | 13, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 14 AR: 14 BR: 813
+  PC: 78 AR: 78 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 531810206 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
 
-  TICK 57 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+  Stack (size = 6): [62 | 13, 13800, 138]
 
-  Stack (size = 5): [813 | 30, 913, 993]
+  Return stack (size = 1): [24]
 
-  Return stack (size = 0): []
+  PC: 79 AR: 78 BR: 138
 
-  PC: 14 AR: 14 BR: 813
+  MEMORY READ VALUE: AR: 78 ---> OperandInstruction(opcode=LIT, operand=62)
 
 
 
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 79 --> JUMP
+
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 58 -- MPC: 48 / MicroInstruction: LatchPC, PCJumpTypeJN, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810207 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 5): [813 | 30, 913, 993]
+  Stack (size = 6): [62 | 13, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 15 AR: 14 BR: 813
+  PC: 79 AR: 79 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 59 -- MPC: 49 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810208 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
 
-  Stack (size = 4): [813 | 913, 993, 0]
+  Stack (size = 6): [62 | 13, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 15 AR: 14 BR: 813
+  PC: 79 AR: 79 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 60 -- MPC: 50 / MicroInstruction: LatchTOS, TOSSelectDS, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810209 -- MPC: 52 / MicroInstruction: LatchPC, PCJumpTypeTOS, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 4): [913 | 913, 993, 0]
+  Stack (size = 6): [62 | 13, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 15 AR: 14 BR: 813
+  PC: 62 AR: 79 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
-
-  TICK 61 -- MPC: 51 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterZero 
 
-  Stack (size = 3): [913 | 993, 0]
+  TICK 531810210 -- MPC: 53 / MicroInstruction: LatchTOS, TOSSelectDS, LatchMPCounter, MicroProgramCounterNext 
 
-  Return stack (size = 0): []
+  Stack (size = 6): [13 | 13, 13800, 138]
 
-  PC: 15 AR: 14 BR: 813
+  Return stack (size = 1): [24]
 
+  PC: 62 AR: 79 BR: 138
 
 
-  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 15 --> SWAP
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 62 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810211 -- MPC: 54 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterZero 
 
-  Stack (size = 3): [913 | 993, 0]
+  Stack (size = 5): [13 | 13800, 138, 100]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 15 AR: 15 BR: 813
+  PC: 62 AR: 79 BR: 138
 
 
 
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 62 --> DUP
+
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 63 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+  TICK 531810212 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 3): [913 | 993, 0]
+  Stack (size = 5): [13 | 13800, 138, 100]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 15 AR: 15 BR: 813
+  PC: 62 AR: 62 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 64 -- MPC: 27 / MicroInstruction: LatchBR, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810213 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
 
-  Stack (size = 3): [913 | 993, 0]
+  Stack (size = 5): [13 | 13800, 138, 100]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 15 AR: 15 BR: 993
+  PC: 62 AR: 62 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 531810214 -- MPC: 26 / MicroInstruction: DataStackPush, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
 
-  TICK 65 -- MPC: 28 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterNext 
+  Stack (size = 6): [13 | 13, 13800, 138]
 
-  Stack (size = 2): [913 | 0]
+  Return stack (size = 1): [24]
 
-  Return stack (size = 0): []
+  PC: 63 AR: 62 BR: 138
 
-  PC: 15 AR: 15 BR: 993
 
 
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 63 --> LIT 80
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 66 -- MPC: 29 / MicroInstruction: DataStackPush, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810215 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 3): [913 | 913, 0]
+  Stack (size = 6): [13 | 13, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 15 AR: 15 BR: 993
+  PC: 63 AR: 63 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 67 -- MPC: 30 / MicroInstruction: LatchTOS, TOSSelectBR, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+  TICK 531810216 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
 
-  Stack (size = 3): [993 | 913, 0]
+  Stack (size = 6): [13 | 13, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 16 AR: 15 BR: 993
+  PC: 63 AR: 63 BR: 138
 
 
 
-  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 16 --> OVER
-
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 68 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810217 -- MPC: 3 / MicroInstruction: DataStackPush, LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 3): [993 | 913, 0]
+  Stack (size = 7): [13 | 13, 13, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 16 AR: 16 BR: 993
+  PC: 63 AR: 63 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 531810218 -- MPC: 4 / MicroInstruction: LatchTOS, TOSSelectMemory, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
 
-  TICK 69 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+  Stack (size = 7): [80 | 13, 13, 13800]
 
-  Stack (size = 3): [993 | 913, 0]
+  Return stack (size = 1): [24]
 
-  Return stack (size = 0): []
+  PC: 64 AR: 63 BR: 138
 
-  PC: 16 AR: 16 BR: 993
+  MEMORY READ VALUE: AR: 63 ---> OperandInstruction(opcode=LIT, operand=80)
 
 
 
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 64 --> SWAP
+
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 70 -- MPC: 31 / MicroInstruction: LatchBR, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810219 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 3): [993 | 913, 0]
+  Stack (size = 7): [80 | 13, 13, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 16 AR: 16 BR: 913
+  PC: 64 AR: 64 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 71 -- MPC: 32 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810220 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
 
-  Stack (size = 2): [993 | 0]
+  Stack (size = 7): [80 | 13, 13, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 16 AR: 16 BR: 913
+  PC: 64 AR: 64 BR: 138
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 72 -- MPC: 33 / MicroInstruction: DataStackPush, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810221 -- MPC: 27 / MicroInstruction: LatchBR, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 3): [993 | 993, 0]
+  Stack (size = 7): [80 | 13, 13, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 16 AR: 16 BR: 913
+  PC: 64 AR: 64 BR: 13
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 73 -- MPC: 34 / MicroInstruction: LatchTOS, TOSSelectBR, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810222 -- MPC: 28 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 3): [913 | 993, 0]
+  Stack (size = 6): [80 | 13, 13800, 138]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 16 AR: 16 BR: 913
+  PC: 64 AR: 64 BR: 13
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 74 -- MPC: 35 / MicroInstruction: LatchBR, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810223 -- MPC: 29 / MicroInstruction: DataStackPush, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 3): [913 | 993, 0]
+  Stack (size = 7): [80 | 80, 13, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 16 AR: 16 BR: 993
+  PC: 64 AR: 64 BR: 13
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 75 -- MPC: 36 / MicroInstruction: DataStackPush, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810224 -- MPC: 30 / MicroInstruction: LatchTOS, TOSSelectBR, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
 
-  Stack (size = 4): [913 | 913, 993, 0]
+  Stack (size = 7): [13 | 80, 13, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 16 AR: 16 BR: 993
+  PC: 65 AR: 64 BR: 13
 
 
 
-  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 65 --> JZ
 
-  TICK 76 -- MPC: 37 / MicroInstruction: LatchTOS, TOSSelectBR, LatchMPCounter, MicroProgramCounterZero, LatchPC, PCJumpTypeNext 
+  [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  Stack (size = 4): [993 | 913, 993, 0]
+  TICK 531810225 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
 
-  Return stack (size = 0): []
+  Stack (size = 7): [13 | 80, 13, 13800]
 
-  PC: 17 AR: 16 BR: 993
+  Return stack (size = 1): [24]
 
+  PC: 65 AR: 65 BR: 13
 
 
-  [INFO]: ru.rmntim.csa4.comp.ControlUnit - NOW EXECUTING INSTRUCTION PC: 17 --> SWAP
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 77 -- MPC: 0 / MicroInstruction: LatchAR, ARSelectPC, LatchMPCounter, MicroProgramCounterNext 
+  TICK 531810226 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
 
-  Stack (size = 4): [993 | 913, 993, 0]
+  Stack (size = 7): [13 | 80, 13, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 17 AR: 17 BR: 993
+  PC: 65 AR: 65 BR: 13
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
 
-  TICK 78 -- MPC: 1 / MicroInstruction: LatchMPCounter, MicroProgramCounterOpcode 
+  TICK 531810227 -- MPC: 44 / MicroInstruction: LatchPC, PCJumpTypeJZ, LatchMPCounter, MicroProgramCounterNext 
 
-  Stack (size = 4): [993 | 913, 993, 0]
+  Stack (size = 7): [13 | 80, 13, 13800]
 
-  Return stack (size = 0): []
+  Return stack (size = 1): [24]
 
-  PC: 17 AR: 17 BR: 993
+  PC: 66 AR: 65 BR: 13
 
 
 
   [INFO]: ru.rmntim.csa4.comp.ControlUnit - 
+
+  TICK 531810228 -- MPC: 45 / MicroInstruction: DataStackPop, LatchMPCounter, MicroProgramCounterNext 
+
+  Stack (size = 6): [13 | 13, 13800, 138]
 
-  TICK 79 -- MPC: 27 / MicroInstruction: LatchBR, LatchMPCounter, MicroProgramCounterNext 
+  Return stack (size = 1): [24]
 
-  Stack (size = 4): [993 | 913, 993, 0]
+  PC: 66 AR: 65 BR: 13
+memory: |-
+  0 - 00000001 - data 1
+  1 - 00000000 - data 0
+  2 - 00000004 000003e7 - lit 999
+  3 - 0000000f - dup
+  4 - 00000004 00000064 - lit 100
+  5 - 00000008 - sub
+  6 - 00000004 00000030 - lit 48
+  7 - 00000010 - swap
+  8 - 00000016 - jn
+  9 - 00000004 000003e7 - lit 999
+  10 - 0000000f - dup
+  11 - 00000004 00000064 - lit 100
+  12 - 00000008 - sub
+  13 - 00000004 0000002c - lit 44
+  14 - 00000010 - swap
+  15 - 00000016 - jn
+  16 - 00000010 - swap
+  17 - 00000011 - over
+  18 - 00000010 - swap
+  19 - 00000011 - over
+  20 - 00000009 - mul
+  21 - 0000000f - dup
+  22 - 00000004 00000038 - lit 56
+  23 - 00000018 - call
+  24 - 00000004 00000028 - lit 40
+  25 - 00000010 - swap
+  26 - 00000015 - jz
+  27 - 00000004 00000001 - lit 1
+  28 - 00000005 - load
+  29 - 00000008 - sub
+  30 - 0000000f - dup
+  31 - 00000004 00000028 - lit 40
+  32 - 00000010 - swap
+  33 - 00000016 - jn
+  34 - 00000004 00000001 - lit 1
+  35 - 00000005 - load
+  36 - 00000007 - add
+  37 - 00000004 00000001 - lit 1
+  38 - 00000006 - store
+  39 - 0000000f - dup
+  40 - 0000000e - drop
+  41 - 0000000d - dec
+  42 - 00000004 0000000a - lit 10
+  43 - 00000017 - jump
+  44 - 0000000e - drop
+  45 - 0000000d - dec
+  46 - 00000004 00000003 - lit 3
+  47 - 00000017 - jump
+  48 - 0000000e - drop
+  49 - 00000004 00000001 - lit 1
+  50 - 00000005 - load
+  51 - 00000004 00000063 - lit 99
+  52 - 00000018 - call
+  53 - 0000001c - halt
+  54 - 00000000 - data 0
+  55 - 00000000 - data 0
+  56 - 0000000f - dup
+  57 - 00000004 00000036 - lit 54
+  58 - 00000006 - store
+  59 - 00000004 00000000 - lit 0
+  60 - 00000004 00000037 - lit 55
+  61 - 00000006 - store
+  62 - 0000000f - dup
+  63 - 00000004 00000050 - lit 80
+  64 - 00000010 - swap
+  65 - 00000015 - jz
+  66 - 0000000f - dup
+  67 - 00000004 0000000a - lit 10
+  68 - 0000000b - mod
+  69 - 00000004 00000037 - lit 55
+  70 - 00000005 - load
+  71 - 00000004 0000000a - lit 10
+  72 - 00000009 - mul
+  73 - 00000007 - add
+  74 - 00000004 00000037 - lit 55
+  75 - 00000006 - store
+  76 - 00000004 0000000a - lit 10
+  77 - 0000000a - div
+  78 - 00000004 0000003e - lit 62
+  79 - 00000017 - jump
+  80 - 0000000e - drop
+  81 - 00000004 00000036 - lit 54
+  82 - 00000005 - load
+  83 - 00000004 00000037 - lit 55
+  84 - 00000005 - load
+  85 - 00000008 - sub
+  86 - 00000004 0000005b - lit 91
+  87 - 00000010 - swap
+  88 - 00000015 - jz
+  89 - 00000004 00000000 - lit 0
+  90 - 00000019 - ret
+  91 - 00000004 00000001 - lit 1
+  92 - 00000019 - ret
+  93 - 00000004 00000030 - lit 48
+  94 - 00000007 - add
+  95 - 00000004 00000000 - lit 0
+  96 - 00000005 - load
+  97 - 0000001b - out
+  98 - 00000019 - ret
+  99 - 00000004 ffffffff - lit -1
+  100 - 00000010 - swap
+  101 - 0000000f - dup
+  102 - 00000004 0000006b - lit 107
+  103 - 00000010 - swap
+  104 - 00000016 - jn
+  105 - 00000004 00000071 - lit 113
+  106 - 00000017 - jump
+  107 - 00000004 0000002d - lit 45
+  108 - 00000004 00000000 - lit 0
+  109 - 00000005 - load
+  110 - 0000001b - out
+  111 - 00000004 ffffffff - lit -1
+  112 - 00000009 - mul
+  113 - 0000000f - dup
+  114 - 00000004 0000000a - lit 10
+  115 - 0000000b - mod
+  116 - 00000010 - swap
+  117 - 00000004 0000000a - lit 10
+  118 - 0000000a - div
+  119 - 00000011 - over
+  120 - 00000004 0000007e - lit 126
+  121 - 00000010 - swap
+  122 - 00000015 - jz
+  123 - 00000010 - swap
+  124 - 00000004 00000071 - lit 113
+  125 - 00000017 - jump
+  126 - 00000010 - swap
+  127 - 0000000e - drop
+  128 - 0000000f - dup
+  129 - 00000004 00000088 - lit 136
+  130 - 00000010 - swap
+  131 - 00000016 - jn
+  132 - 00000004 0000005d - lit 93
+  133 - 00000018 - call
+  134 - 00000004 00000080 - lit 128
+  135 - 00000017 - jump
+  136 - 00000019 - ret
